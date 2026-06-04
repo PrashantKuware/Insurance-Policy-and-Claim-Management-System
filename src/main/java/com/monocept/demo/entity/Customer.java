@@ -1,0 +1,43 @@
+package com.monocept.demo.entity;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "customers")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerId;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    private LocalDate dateOfBirth;
+
+    private String address;
+
+    private String city;
+
+    private String state;
+
+    private String pinCode;
+
+    private String nomineeName;
+
+    private String nomineeRelation;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
+}
