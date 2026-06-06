@@ -1,0 +1,506 @@
+{
+  "info": {
+    "_postman_id": "a061b6d0-00fc-4162-8ff7-1d0ef4fea8f5",
+    "name": "Insurence",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32164531",
+    "_collection_link": "https://go.postman.co/collection/32164531-a061b6d0-00fc-4162-8ff7-1d0ef4fea8f5?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Insurance Products",
+      "item": [
+        {
+          "name": "add product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"productName\": \"Health Insurance\",\r\n//     \"productType\": \"HEALTH\",\r\n//     \"description\": \"Provides medical coverage for hospitalization and treatment expenses\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Motor Insurance\",\r\n//     \"productType\": \"MOTOR\",\r\n//     \"description\": \"Provides coverage for vehicle damage, theft and accidents\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Life Insurance\",\r\n//     \"productType\": \"LIFE\",\r\n//     \"description\": \"Provides financial protection to nominee in case of policyholder death\"\r\n// }\r\n\r\n{\r\n    \"productName\": \"Travel Insurance\",\r\n    \"productType\": \"TRAVEL\",\r\n    \"description\": \"Provides protection against travel related risks and emergencies\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all product",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"productName\": \"Health Insurance\",\r\n    \"productType\": \"HEALTH\",\r\n    \"description\": \"Provides medical coverage for hospitalization and treatment expenses\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products?pageNo=0&pageSize=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "pageNo",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update product",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"productName\": \"Health Insurance Premium\",\r\n    \"productType\": \"HEALTH\",\r\n    \"description\": \"Updated health insurance product\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deactivate product",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/products/1/deactivate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "products",
+                "1",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "customer add",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"dateOfBirth\": \"2003-05-20\",\r\n  \"address\": \"Shahdara1\",\r\n  \"city\": \"Delhi\",\r\n  \"state\": \"Delhi\",\r\n  \"pinCode\": \"110032\",\r\n  \"nomineeName\": \"Amit Gupta\",\r\n  \"nomineeRelation\": \"Brother\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/customer/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "customer",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update customer",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"dateOfBirth\": \"2003-05-20\",\r\n    \"address\": \"Shahdara\",\r\n    \"city\": \"Delhi\",\r\n    \"state\": \"Delhi\",\r\n    \"pinCode\": \"110032\",\r\n    \"nomineeName\": \"Bramit Gupta\",\r\n    \"nomineeRelation\": \"Brother\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/customer/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "customer",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"dateOfBirth\": \"2003-05-20\",\r\n    \"address\": \"Shahdara\",\r\n    \"city\": \"Delhi\",\r\n    \"state\": \"Delhi\",\r\n    \"pinCode\": \"110032\",\r\n    \"nomineeName\": \"Bramit Gupta\",\r\n    \"nomineeRelation\": \"Brother\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/customer/5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "customer",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/customer/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "customer",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get customer by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/customer/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "customer",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Policy Plan",
+      "item": [
+        {
+          "name": "add new Policy Plan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Silver Plan\",\r\n//     \"coverageAmount\": 300000,\r\n//     \"premiumAmount\": 5000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Basic health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Gold Plan\",\r\n//     \"coverageAmount\": 500000,\r\n//     \"premiumAmount\": 10000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Extended health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Platinum Plan\",\r\n//     \"coverageAmount\": 1000000,\r\n//     \"premiumAmount\": 20000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Premium health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 2,\r\n//     \"planName\": \"Comprehensive Motor Plan\",\r\n//     \"coverageAmount\": 700000,\r\n//     \"premiumAmount\": 12000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Vehicle damage and theft coverage\"\r\n// }\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all plans",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Silver Plan\",\r\n//     \"coverageAmount\": 300000,\r\n//     \"premiumAmount\": 5000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Basic health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Gold Plan\",\r\n//     \"coverageAmount\": 500000,\r\n//     \"premiumAmount\": 10000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Extended health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Platinum Plan\",\r\n//     \"coverageAmount\": 1000000,\r\n//     \"premiumAmount\": 20000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Premium health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 2,\r\n//     \"planName\": \"Comprehensive Motor Plan\",\r\n//     \"coverageAmount\": 700000,\r\n//     \"premiumAmount\": 12000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Vehicle damage and theft coverage\"\r\n// }\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/plans?pageNo=0&pageSize=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "plans"
+              ],
+              "query": [
+                {
+                  "key": "pageNo",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get plan by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/plans/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "plans",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update plan",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"productId\": 1,\r\n    \"planName\": \"Gold Plan Updated\",\r\n    \"coverageAmount\": 600000,\r\n    \"premiumAmount\": 11000,\r\n    \"premiumType\": \"ANNUAL\",\r\n    \"duration\": 2,\r\n    \"termsConditions\": \"Updated terms and conditions\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/plans/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "plans",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deactivate plan",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/plans/2/deactivate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "plans",
+                "2",
+                "deactivate"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "login customer",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"maypank@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "register Customer",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"fullName\":\"Mayank Gupta\",\r\n  \"email\":\"mayank@gmail.com\",\r\n  \"password\":\"123456\",\r\n  \"mobileNumber\":\"9876543210\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
