@@ -17,6 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,13 +59,25 @@ public class Policy {
 
     private BigDecimal totalPremiumPaid;
 
-    private LocalDateTime createdDate;
-
-    private LocalDateTime updatedDate;
-
     @OneToMany(mappedBy = "policy")
     private List<PremiumPayment> payments;
 
     @OneToMany(mappedBy = "policy")
     private List<Claim> claims;
+    
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
+
+    private LocalDateTime updatedDate;
+    
+    @PrePersist
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 }

@@ -437,70 +437,271 @@
       ]
     },
     {
-      "name": "login customer",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"email\": \"maypank@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Policy Purchase",
+      "item": [
+        {
+          "name": "purchase policy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"customerId\": 1,\r\n    \"planId\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/policies/purchase",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "purchase"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8080/api/auth/login",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "api",
-            "auth",
-            "login"
-          ]
+        {
+          "name": "issue policy",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"policyId\": 2,\r\n    \"policyNumber\": \"POL1749195000100\",\r\n    \"customerName\": \"Mayank Gupta\",\r\n    \"planName\": \"Gold Plan\",\r\n    \"policyStatus\": \"PENDING_PAYMENT\",\r\n    \"totalPremiumPaid\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/policies/issue?customerId=1&planId=3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "issue"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                },
+                {
+                  "key": "planId",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get policy by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/policies/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get policy of customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/policies/customer/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "customer",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all policy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/policies?pageNo=0&pageSize=5&sortBy=policyId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies"
+              ],
+              "query": [
+                {
+                  "key": "pageNo",
+                  "value": "0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "5"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "policyId"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "active policy",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/policies/1/activate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "1",
+                "activate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel policy",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/policies/2/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "policies",
+                "2",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "register Customer",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"fullName\":\"Mayank Gupta\",\r\n  \"email\":\"mayank@gmail.com\",\r\n  \"password\":\"123456\",\r\n  \"mobileNumber\":\"9876543210\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "register and login",
+      "item": [
+        {
+          "name": "login customer",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"maypank@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8080/api/auth/register",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "8080",
-          "path": [
-            "api",
-            "auth",
-            "register"
-          ]
+        {
+          "name": "register Customer",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\":\"Mayank Gupta\",\r\n  \"email\":\"mayank@gmail.com\",\r\n  \"password\":\"123456\",\r\n  \"mobileNumber\":\"9876543210\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     }
   ]
 }
