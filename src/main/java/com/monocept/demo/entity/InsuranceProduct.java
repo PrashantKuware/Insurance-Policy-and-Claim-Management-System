@@ -1,7 +1,6 @@
 package com.monocept.demo.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.monocept.demo.enums.ProductType;
 
@@ -12,7 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,20 +33,30 @@ public class InsuranceProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String productName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductType productType;
 
     private String description;
 
     private Boolean active = true;
 
+    @Column(updatable = false)
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;
+    
+    @PrePersist
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
+    }
 
-    @OneToMany(mappedBy = "product")
-    private List<PolicyPlan> plans;
+    @PreUpdate
+    public void preUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 }

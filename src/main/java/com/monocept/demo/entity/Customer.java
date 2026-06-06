@@ -37,7 +37,19 @@ public class Customer {
 
     private String nomineeRelation;
 
+    @Column(updatable = false)
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;
+
+    @PrePersist 
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 }

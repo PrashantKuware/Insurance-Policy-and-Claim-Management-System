@@ -1,13 +1,20 @@
 package com.monocept.demo.dto.response;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
-public class ApiResponse {
+@NoArgsConstructor
+public class ApiResponse<T> {
 
+    private boolean success;
     private String message;
-
-    private Object data;
-}
+    private T data;
+    private LocalDateTime timestamp;
+}	
