@@ -16,6 +16,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,9 +58,21 @@ public class PolicyPlan {
 
 	private Boolean active = true;
 
-	private LocalDateTime createdDate;
+	@Column(updatable = false)
+    private LocalDateTime createdDate;
 
-	private LocalDateTime updatedDate;
+    private LocalDateTime updatedDate;
+    
+    @PrePersist
+    public void prePersist() {
+        createdDate = LocalDateTime.now();
+        updatedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedDate = LocalDateTime.now();
+    }
 
 	@OneToMany(mappedBy = "policyPlan")
 	private List<Policy> policies;

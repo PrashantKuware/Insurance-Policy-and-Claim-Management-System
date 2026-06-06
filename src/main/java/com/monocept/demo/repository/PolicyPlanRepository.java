@@ -6,4 +6,6 @@ import com.monocept.demo.entity.PolicyPlan;
 
 public interface PolicyPlanRepository extends JpaRepository<PolicyPlan, Long>{
 
+    boolean existsByPlanName(String planName);
+
 }

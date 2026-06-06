@@ -1,21 +1,31 @@
 package com.monocept.demo.dto.response;
 
+import java.math.BigDecimal;
+
+import com.monocept.demo.enums.PremiumType;
+
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class PolicyPlanResponseDto {
 
-    private Long planId;
+	private Long planId;
 
-    private String productName;
+	private String productName;
 
-    private String planName;
+	private String planName;
 
-    private Double coverageAmount;
+	private PremiumType premiumType;
 
-    private Double premiumAmount;
+	private BigDecimal coverageAmount;
 
-    private String premiumType;
+	private BigDecimal premiumAmount;
 
-    private Integer duration;
+	private Integer duration;
+
+	private String termsConditions;
+
+	private boolean active;
 }
