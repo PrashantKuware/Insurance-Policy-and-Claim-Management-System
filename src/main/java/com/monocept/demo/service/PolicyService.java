@@ -7,7 +7,8 @@ import org.springframework.data.domain.Page;
 import com.monocept.demo.dto.request.PolicyPurchaseRequestDto;
 import com.monocept.demo.dto.response.PolicyResponseDto;
 
-public interface PolicyService {
+public interface PolicyService 
+{
 
 	PolicyResponseDto purchasePolicy(PolicyPurchaseRequestDto dto);
 

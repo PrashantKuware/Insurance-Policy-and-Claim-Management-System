@@ -1,0 +1,50 @@
+package com.monocept.demo.service;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.monocept.demo.dto.request.ClaimDecisionRequestDto;
+import com.monocept.demo.dto.request.ClaimRecommendationRequestDto;
+import com.monocept.demo.dto.request.ClaimRequestDto;
+import com.monocept.demo.dto.request.ClaimReviewRequestDto;
+import com.monocept.demo.dto.response.ClaimResponseDto;
+
+
+public interface ClaimService {
+
+    ClaimResponseDto submitClaim(
+            Long policyId,
+            ClaimRequestDto requestDto);
+
+    ClaimResponseDto reviewClaim(
+            Long claimId,
+            ClaimReviewRequestDto requestDto);
+
+    ClaimResponseDto recommendClaimForApproval(
+            Long claimId,
+            ClaimRecommendationRequestDto requestDto);
+
+    ClaimResponseDto recommendClaimForRejection(
+            Long claimId,
+            ClaimRecommendationRequestDto requestDto);
+
+    ClaimResponseDto approveClaim(
+            Long claimId,
+            ClaimDecisionRequestDto requestDto);
+
+    ClaimResponseDto rejectClaim(
+            Long claimId,
+            ClaimDecisionRequestDto requestDto);
+
+    ClaimResponseDto getClaimById(Long claimId);
+
+    ClaimResponseDto getClaimByClaimNumber(String claimNumber);
+
+    Page<ClaimResponseDto> getClaimsByCustomer(
+            Long customerId,
+            Pageable pageable);
+
+    Page<ClaimResponseDto> getAllClaims(
+            Pageable pageable);
+}
