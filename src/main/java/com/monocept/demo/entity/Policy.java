@@ -33,7 +33,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Policy {
+public class Policy 
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
