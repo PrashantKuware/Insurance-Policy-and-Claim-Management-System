@@ -1,5 +1,7 @@
 package com.monocept.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,7 +12,10 @@ import com.monocept.demo.dto.request.LoginRequestDto;
 import com.monocept.demo.dto.request.RegisterRequestDto;
 import com.monocept.demo.dto.response.AuthResponseDto;
 import com.monocept.demo.entity.User;
+import com.monocept.demo.enums.Role;
 import com.monocept.demo.exception.DuplicateResourceException;
+import com.monocept.demo.exception.ForbiddenAccessException;
+import com.monocept.demo.exception.ResourceNotFoundException;
 import com.monocept.demo.repository.UserRepository;
 import com.monocept.demo.security.CustomUserDetails;
 import com.monocept.demo.security.JwtService;
@@ -81,5 +86,21 @@ public class AuthServiceImpl implements AuthService {
                 token,
                 "Bearer",
                 userDetails.getUsername());
+    }
+
+    @Override
+    public List<User> getAllUser(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found"));
+
+        if(user.getRole() != Role.ADMIN) {
+            throw new ForbiddenAccessException(
+                    "Only admin can view all users");
+        }
+
+        return userRepository.findAll();
     }
 }

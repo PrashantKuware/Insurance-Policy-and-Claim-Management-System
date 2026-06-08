@@ -1,6 +1,6 @@
 package com.monocept.demo.exception;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler extends RuntimeException {
+public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<Map<String, Object>> handleResourceNotFound(ResourceNotFoundException ex) {
@@ -102,6 +102,41 @@ public class GlobalExceptionHandler extends RuntimeException {
 		return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.");
 	}
 
+	@ExceptionHandler(ForbiddenAccessException.class)
+	public ResponseEntity<Map<String, Object>> handleForbiddenAccessException(ForbiddenAccessException ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.FORBIDDEN, "You Can't have access to do that.");
+	}
+
+	@ExceptionHandler(InvalidClaimStatusException.class)
+	public ResponseEntity<Map<String, Object>> handleInvalidClaimStatusException(InvalidClaimStatusException ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.BAD_REQUEST, "Invalid claim status.");
+	}
+	
+	@ExceptionHandler(InvalidPolicyStatusException.class)
+	public ResponseEntity<Map<String, Object>> handleInvalidPolicyStatusException(InvalidPolicyStatusException ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.BAD_REQUEST, "Invalid Policy status.");
+	}
+	
+	@ExceptionHandler(UnauthorizedAccessException.class)
+	public ResponseEntity<Map<String, Object>> handleUnauthorizedAccessException(UnauthorizedAccessException ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.UNAUTHORIZED, "You Are Unauthorized.");
+	}
+	
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.BAD_REQUEST, "Validation Error.");
+	}
+	
 	private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
 		Map<String, Object> error = new LinkedHashMap<>();
 		error.put("timestamp", LocalDateTime.now());

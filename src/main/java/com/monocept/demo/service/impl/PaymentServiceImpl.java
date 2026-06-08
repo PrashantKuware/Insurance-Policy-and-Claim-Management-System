@@ -19,95 +19,71 @@ import com.monocept.demo.repository.PolicyRepository;
 import com.monocept.demo.repository.PremiumPaymentRepository;
 import com.monocept.demo.service.PaymentService;
 
-
-
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
-    private PremiumPaymentRepository paymentRepository;
+	@Autowired
+	private PremiumPaymentRepository paymentRepository;
 
-    @Autowired
-    private PolicyRepository policyRepository;
+	@Autowired
+	private PolicyRepository policyRepository;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @Override
-    public PaymentResponseDto payPremium(Long policyId,
-                                         PaymentRequestDto requestDto) {
+	@Override
+	public PaymentResponseDto payPremium(Long policyId, PaymentRequestDto requestDto) {
 
-        Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Policy not found"));
+		Policy policy = policyRepository.findById(policyId)
+				.orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
 
-        PremiumPayment payment = new PremiumPayment();
+		PremiumPayment payment = new PremiumPayment();
 
-        payment.setPolicy(policy);
-        payment.setAmount(requestDto.getAmount());
-        payment.setPaymentMode(requestDto.getPaymentMode());
-        payment.setPaymentDate(LocalDateTime.now());
+		payment.setPolicy(policy);
+		payment.setAmount(requestDto.getAmount());
+		payment.setPaymentMode(requestDto.getPaymentMode());
+		payment.setPaymentDate(LocalDateTime.now());
+		payment.setTransactionReference("TXN-" + System.currentTimeMillis());
 
-        payment.setPaymentStatus(PaymentStatus.SUCCESS);
+		payment.setPaymentStatus(PaymentStatus.SUCCESS);
 
+		payment = paymentRepository.save(payment);
 
-        payment = paymentRepository.save(payment);
+		return mapper.map(payment, PaymentResponseDto.class);
+	}
 
-        return mapper.map(payment, PaymentResponseDto.class);
-    }
+	@Override
+	public PaymentResponseDto getPaymentById(Long paymentId) {
 
-    @Override
-    public PaymentResponseDto getPaymentById(Long paymentId) {
+		PremiumPayment payment = paymentRepository.findById(paymentId)
+				.orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
 
-        PremiumPayment payment =
-                paymentRepository.findById(paymentId)
-                .orElseThrow(() ->
-                new ResourceNotFoundException("Payment not found"));
+		return mapper.map(payment, PaymentResponseDto.class);
+	}
 
-        return mapper.map(payment,
-                PaymentResponseDto.class);
-    }
+	@Override
+	public Page<PaymentResponseDto> getPaymentsByPolicy(Long policyId, Pageable pageable) {
 
-    @Override
-    public Page<PaymentResponseDto> getPaymentsByPolicy(
-            Long policyId,
-            Pageable pageable) {
+		return paymentRepository.findByPolicyPolicyId(policyId, pageable)
+				.map(payment -> mapper.map(payment, PaymentResponseDto.class));
+	}
 
-        return paymentRepository
-                .findByPolicyPolicyId(policyId, pageable)
-                .map(payment ->
-                        mapper.map(
-                                payment,
-                                PaymentResponseDto.class));
-    }
+	@Override
+	public Page<PaymentResponseDto> getAllPayments(Pageable pageable) {
 
-    @Override
-    public Page<PaymentResponseDto> getAllPayments(
-            Pageable pageable) {
+		return paymentRepository.findAll(pageable).map(payment -> mapper.map(payment, PaymentResponseDto.class));
+	}
 
-        return paymentRepository.findAll(pageable)
-                .map(payment ->
-                        mapper.map(payment,
-                                PaymentResponseDto.class));
-    }
+	@Override
+	public PaymentResponseDto updatePaymentStatus(Long paymentId, String status) {
 
-    @Override
-    public PaymentResponseDto updatePaymentStatus(
-            Long paymentId,
-            String status) {
+		PremiumPayment payment = paymentRepository.findById(paymentId)
+				.orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
 
-        PremiumPayment payment =
-                paymentRepository.findById(paymentId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Payment not found"));
+		payment.setPaymentStatus(PaymentStatus.valueOf(status));
 
-        payment.setPaymentStatus(
-                PaymentStatus.valueOf(status));
+		paymentRepository.save(payment);
 
-        paymentRepository.save(payment);
-
-        return mapper.map(payment,
-                PaymentResponseDto.class);
-    }
+		return mapper.map(payment, PaymentResponseDto.class);
+	}
 }
