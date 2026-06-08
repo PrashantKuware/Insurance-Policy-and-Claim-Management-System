@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.monocept.demo.dto.request.LoginRequestDto;
 import com.monocept.demo.dto.request.RegisterRequestDto;
 import com.monocept.demo.dto.response.AuthResponseDto;
+import com.monocept.demo.security.JwtService;
 import com.monocept.demo.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
+
 
 	@PostMapping("/register")
 	public AuthResponseDto register(@Valid @RequestBody RegisterRequestDto request) {
