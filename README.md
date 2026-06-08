@@ -32,8 +32,10 @@ The Use Case Diagram illustrates the interactions between different users and th
     - Manage policy plans
     - Approve or reject claims
     - Monitor overall system operations
+<img width="1029" height="1018" alt="image 1" src="https://github.com/user-attachments/assets/cfe9f7a9-0c62-4462-a766-84c7c44aac34" />
 
-![image.png](image.png)
+<img width="529" height="1103" alt="image" src="https://github.com/user-attachments/assets/fdb05fc6-fd84-4319-8244-21ac5683acf0" />
+
 
 # ER Diagram
 
@@ -110,7 +112,8 @@ The Class Diagram represents the static structure of the Insurance Policy and Cl
     Each Policy can have multiple claims throughout its lifecycle.
     
 
-![image.png](image%201.png)
+<img width="1029" height="1018" alt="image 1" src="https://github.com/user-attachments/assets/5f8fe55f-9069-4759-8120-413f8893268c" />
+
 
 # Sequence Diagram
 
@@ -118,7 +121,8 @@ The Class Diagram represents the static structure of the Insurance Policy and Cl
 
 The Sequence Diagram illustrates the interaction between the customer and system components during the policy purchase process. It shows the chronological flow of messages exchanged among controllers, services, repositories, and the database.
 
-![image.png](image%202.png)
+<img width="1052" height="734" alt="image 2" src="https://github.com/user-attachments/assets/aca7d1f3-bca7-46dc-b535-7c271509d0ee" />
+
 
 | Component | Responsibility |
 | --- | --- |
@@ -146,7 +150,8 @@ The Sequence Diagram illustrates the interaction between the customer and system
 
 The Sequence Diagram illustrates the interaction between Customer, Agent, Admin, and system components during the claim approval process. It shows the order of operations involved in claim submission, review, recommendation, and final approval.
 
-![image.png](image%203.png)
+<img width="1034" height="1025" alt="image 3" src="https://github.com/user-attachments/assets/0afd24b4-9bd1-43c2-8adc-236d4a4f9d70" />
+
 
 ### Actors and Components
 
@@ -179,7 +184,8 @@ The Sequence Diagram illustrates the interaction between Customer, Agent, Admin,
 
 The Activity Diagram represents the workflow involved in purchasing an insurance policy. It illustrates the sequence of activities, decision points, and possible outcomes during the policy purchase process.
 
-![image.png](image%204.png)
+<img width="566" height="857" alt="image 4" src="https://github.com/user-attachments/assets/d8b336d1-3656-4308-9963-bce5aa64a3f2" />
+
 
 ### Activities Included
 
@@ -214,7 +220,8 @@ The Activity Diagram represents the workflow involved in purchasing an insurance
 
 The Activity Diagram illustrates the workflow involved in processing an insurance claim. It shows the sequence of activities performed by the customer, agent, and administrator, along with the decision points that determine the claim outcome.
 
-![image.png](image%205.png)
+<img width="843" height="1113" alt="image 5" src="https://github.com/user-attachments/assets/861a7a2b-bd5a-4111-bc71-a89c675712a4" />
+
 
 ### Activities Included
 
@@ -254,7 +261,8 @@ The Activity Diagram illustrates the workflow involved in processing an insuranc
 
 The Policy Lifecycle Diagram illustrates the various states through which an insurance policy passes during its lifetime. It shows how a policy is created, activated, renewed, expired, or cancelled based on customer actions and system events.
 
-![image.png](image%206.png)
+<img width="733" height="606" alt="image 6" src="https://github.com/user-attachments/assets/f88d2c08-aaec-4240-b87e-c6ba6ef558c3" />
+
 
 ### States Included
 
@@ -282,7 +290,8 @@ The Policy Lifecycle Diagram illustrates the various states through which an ins
 
 The Claim Lifecycle Diagram illustrates the different states through which an insurance claim progresses from submission to final closure. It helps visualize the workflow followed during claim evaluation, recommendation, approval, and settlement.
 
-![image.png](image%207.png)
+<img width="464" height="749" alt="image 7" src="https://github.com/user-attachments/assets/9b47503a-b94a-458c-9db2-b7dc67c57a5f" />
+
 
 | State | Description |
 | --- | --- |
@@ -308,7 +317,8 @@ The Claim Lifecycle Diagram illustrates the different states through which an in
 
 The API Design defines the REST endpoints used by the Insurance Policy and Claim Management System. These APIs enable communication between clients and the backend application for authentication, policy management, payments, and claim processing.
 
-![image.png](image%208.png)
+<img width="691" height="472" alt="image 8" src="https://github.com/user-attachments/assets/64da4bb9-911f-4f79-ae49-7cb7853058cb" />
+
 
 ## API Categories
 
@@ -404,15 +414,18 @@ The Security Design defines the mechanisms used to protect the Insurance Policy 
 | Agent | Review claims and recommend decisions |
 | Admin | Manage users, products, plans, and approve/reject claims |
 
-![image.png](image%209.png)
+<img width="704" height="530" alt="image 9" src="https://github.com/user-attachments/assets/bf4bbc00-e70e-437a-becb-c6b1bad59923" />
+
 
 The JWT Authentication Flow Diagram illustrates how users are authenticated within the system. After successful login, the system generates a JWT token and returns it to the client. The client includes this token in subsequent API requests. The server validates the token before granting access to protected resources.
 
-![image.png](image%2010.png)
+<img width="438" height="425" alt="image 10" src="https://github.com/user-attachments/assets/45d0d20b-8c0e-4fc0-b71a-6baf619e8063" />
+
 
 Security Architecture Diagram
 
-![image.png](image%2011.png)
+<img width="192" height="747" alt="image 11" src="https://github.com/user-attachments/assets/29efe395-e5f4-4438-9ee9-3d6f3a561852" />
+
 
 # Technology Stack
 
@@ -433,7 +446,8 @@ The Technology Stack defines the set of technologies, frameworks, tools, and dat
 | Testing | JUnit | Unit testing |
 | IDE | IntelliJ IDEA / Eclipse | Development environment |
 
-![image.png](image%2012.png)
+<img width="578" height="532" alt="image 12" src="https://github.com/user-attachments/assets/1f4700c5-f658-4145-a1a8-3e28aaaf2bf0" />
+
 
 ## Layer-wise Technology Mapping
 
@@ -450,4 +464,5 @@ The Technology Stack defines the set of technologies, frameworks, tools, and dat
 
 The Project Structure represents the organization of source code and application modules within the Insurance Policy and Claim Management System. A well-defined structure improves maintainability, scalability, readability, and separation of concerns.
 
-![image.png](image%2013.png)
+<img width="2073" height="851" alt="image 13" src="https://github.com/user-attachments/assets/b14e2d47-29b3-48f3-8114-897d6bbad082" />
+
