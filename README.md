@@ -40,6 +40,8 @@ The Use Case Diagram illustrates the interactions between different users and th
 # ER Diagram
 
 The ER Diagram represents the database structure of the Insurance Policy and Claim Management System. It shows the entities, their attributes, and the relationships among them.
+<img width="641" height="949" alt="er-diagram" src="https://github.com/user-attachments/assets/54a44c20-0eda-4d34-8740-5b5866664ae0" />
+
 
 ### Main Entities
 
