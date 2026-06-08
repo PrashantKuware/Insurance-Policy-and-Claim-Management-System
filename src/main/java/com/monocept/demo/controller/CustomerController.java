@@ -2,7 +2,8 @@ package com.monocept.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,12 @@ public class CustomerController {
 
 		return ApiResponse.<CustomerResponseDto>builder().success(true).message("Customer profile created successfully")
 				.data(response).timestamp(LocalDateTime.now()).build();
+	}
+
+	@GetMapping("/agent/{agentId}")
+	public Page<CustomerResponseDto> getCustomersByAgent(@PathVariable Long agentId, Pageable pageable) {
+
+		return customerService.getCustomersByAgent(agentId, pageable);
 	}
 
 	@GetMapping("/")

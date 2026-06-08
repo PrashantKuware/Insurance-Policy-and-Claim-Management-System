@@ -22,6 +22,10 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "agent_id")
+    private User agent;
 
     private LocalDate dateOfBirth;
 

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.monocept.demo.enums.Role;
 import com.monocept.demo.dto.request.CustomerRequestDto;
 import com.monocept.demo.dto.response.CustomerResponseDto;
 import com.monocept.demo.entity.Customer;
@@ -44,6 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
 		dto.setState(customer.getState());
 		dto.setPinCode(customer.getPinCode());
 		dto.setNomineeName(customer.getNomineeName());
+		if (customer.getAgent() != null) {
+			dto.setAgentId(customer.getAgent().getUserId());
+			dto.setAgentName(customer.getAgent().getFullName());
+		}
 		return dto;
 	}
 
@@ -53,6 +59,12 @@ public class CustomerServiceImpl implements CustomerService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not found with this id: " + userId));
 
+		User agent = userRepository.findById(customerRequestDto.getAgentId())
+				.orElseThrow(() -> new ResourceNotFoundException("Agent not found"));
+
+		if (agent.getRole() != Role.AGENT) {
+			throw new RuntimeException("Selected user is not an Agent");
+		}
 		Customer customer = new Customer();
 		customer.setDateOfBirth(customerRequestDto.getDateOfBirth());
 		customer.setAddress(customerRequestDto.getAddress());
@@ -63,6 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setNomineeRelation(customerRequestDto.getNomineeRelation());
 
 		customer.setUser(user);
+		customer.setAgent(agent);
 
 		Customer savedCustomer = customerRepository.save(customer);
 		return customerToDto(savedCustomer);
@@ -79,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerResponseDto getCustomerById(Long customerId) {
 		Customer customer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
-		
+
 		return customerToDto(customer);
 	}
 
@@ -95,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto) {
 		Customer customer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
-		
+
 		customer.setDateOfBirth(customerRequestDto.getDateOfBirth());
 		customer.setAddress(customerRequestDto.getAddress());
 		customer.setCity(customerRequestDto.getCity());
@@ -103,10 +116,16 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setPinCode(customerRequestDto.getPinCode());
 		customer.setNomineeName(customerRequestDto.getNomineeName());
 		customer.setNomineeRelation(customerRequestDto.getNomineeRelation());
-		
+
 		customerRepository.save(customer);
-		
+
 		return customerToDto(customer);
+	}
+
+	@Override
+	public Page<CustomerResponseDto> getCustomersByAgent(Long agentId, Pageable pageable) {
+
+		return customerRepository.findByAgentUserId(agentId, pageable).map(this::customerToDto);
 	}
 
 }

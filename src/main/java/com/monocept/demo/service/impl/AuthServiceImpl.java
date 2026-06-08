@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 		user.setFullName(registerRequestDto.getFullName());
 		user.setMobileNumber(registerRequestDto.getMobileNumber());
 		user.setPassword(registerRequestDto.getPassword());
-		user.setRole(Role.CUSTOMER);
+		user.setRole(registerRequestDto.getRole());
 
 		userRepository.save(user);
 

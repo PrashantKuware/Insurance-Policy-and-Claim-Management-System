@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class CustomerRequestDto {
 
+    private Long agentId;
+
     private LocalDate dateOfBirth;
 
     @NotBlank

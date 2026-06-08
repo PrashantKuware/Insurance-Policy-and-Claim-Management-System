@@ -18,56 +18,42 @@ import com.monocept.demo.repository.ClaimStatusHistoryRepository;
 import com.monocept.demo.service.ClaimStatusHistoryService;
 
 @Service
-public class ClaimStatusHistoryServiceImpl
-        implements ClaimStatusHistoryService {
+public class ClaimStatusHistoryServiceImpl implements ClaimStatusHistoryService {
 
-    @Autowired
-    private ClaimRepository claimRepository;
+	@Autowired
+	private ClaimRepository claimRepository;
 
-    @Autowired
-    private ClaimStatusHistoryRepository historyRepository;
+	@Autowired
+	private ClaimStatusHistoryRepository historyRepository;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @Override
-    public void saveStatusHistory(Long claimId,
-                                  ClaimStatus oldStatus,
-                                  ClaimStatus newStatus,
-                                  String remarks) {
+	@Override
+	public void saveStatusHistory(Long claimId, ClaimStatus oldStatus, ClaimStatus newStatus, String remarks) {
 
-        Claim claim = claimRepository.findById(claimId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Claim not found"));
+		Claim claim = claimRepository.findById(claimId)
+				.orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
 
-        ClaimStatusHistory history =
-                new ClaimStatusHistory();
+		ClaimStatusHistory history = new ClaimStatusHistory();
 
-        history.setClaim(claim);
+		history.setClaim(claim);
 
-        history.setPreviousStatus(oldStatus);
+		history.setPreviousStatus(oldStatus);
 
-        history.setNewStatus(newStatus);
+		history.setNewStatus(newStatus);
 
-        history.setRemarks(remarks);
+		history.setRemarks(remarks);
 
-        history.setUpdatedDate(
-                LocalDateTime.now());
+		history.setUpdatedDate(LocalDateTime.now());
 
-        historyRepository.save(history);
-    }
+		historyRepository.save(history);
+	}
 
-    @Override
-    public List<ClaimHistoryResponseDto>
-    getClaimHistory(Long claimId) {
+	@Override
+	public List<ClaimHistoryResponseDto> getClaimHistory(Long claimId) {
 
-        return historyRepository
-                .findByClaimClaimId(claimId)
-                .stream()
-                .map(history ->
-                        mapper.map(history,
-                                ClaimHistoryResponseDto.class))
-                .collect(Collectors.toList());
-    }
+		return historyRepository.findByClaimClaimIdOrderByUpdatedDateAsc(claimId).stream()
+				.map(history -> mapper.map(history, ClaimHistoryResponseDto.class)).collect(Collectors.toList());
+	}
 }

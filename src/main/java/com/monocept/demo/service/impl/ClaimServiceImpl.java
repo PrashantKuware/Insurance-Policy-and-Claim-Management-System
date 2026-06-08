@@ -1,6 +1,5 @@
 package com.monocept.demo.service.impl;
 
-
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
@@ -18,6 +17,7 @@ import com.monocept.demo.entity.Claim;
 import com.monocept.demo.entity.Policy;
 import com.monocept.demo.enums.ClaimStatus;
 import com.monocept.demo.enums.PolicyStatus;
+import com.monocept.demo.exception.DuplicateResourceException;
 import com.monocept.demo.exception.InvalidClaimStatusException;
 import com.monocept.demo.exception.InvalidPolicyStatusException;
 import com.monocept.demo.exception.ResourceNotFoundException;
@@ -26,309 +26,247 @@ import com.monocept.demo.repository.PolicyRepository;
 import com.monocept.demo.service.ClaimService;
 import com.monocept.demo.service.ClaimStatusHistoryService;
 
-
 @Service
 public class ClaimServiceImpl implements ClaimService {
 
-    @Autowired
-    private ClaimRepository claimRepository;
+	@Autowired
+	private ClaimRepository claimRepository;
 
-    @Autowired
-    private PolicyRepository policyRepository;
+	@Autowired
+	private PolicyRepository policyRepository;
 
-    @Autowired
-    private ClaimStatusHistoryService historyService;
+	@Autowired
+	private ClaimStatusHistoryService historyService;
 
-    @Autowired
-    private ModelMapper mapper;
+	@Autowired
+	private ModelMapper mapper;
 
-    @Override
-    public ClaimResponseDto recommendClaimForApproval(
-            Long claimId,
-            ClaimRecommendationRequestDto requestDto) {
+	@Override
+	public ClaimResponseDto recommendClaimForApproval(Long claimId, ClaimRecommendationRequestDto requestDto) {
 
-        Claim claim = getClaimEntity(claimId);
+		Claim claim = getClaimEntity(claimId);
 
-        if(claim.getClaimStatus() != ClaimStatus.UNDER_REVIEW) {
-            throw new InvalidClaimStatusException(
-                    "Claim must be under review");
-        }
+		if (claim.getClaimStatus() != ClaimStatus.UNDER_REVIEW) {
+			throw new InvalidClaimStatusException("Claim must be under review");
+		}
 
-        ClaimStatus oldStatus = claim.getClaimStatus();
+		ClaimStatus oldStatus = claim.getClaimStatus();
 
-        claim.setClaimStatus(
-                ClaimStatus.RECOMMENDED_FOR_APPROVAL);
+		claim.setClaimStatus(ClaimStatus.RECOMMENDED_FOR_APPROVAL);
 
-        claim.setAgentRemarks(
-                requestDto.getRemarks());
+		claim.setAgentRemarks(requestDto.getRemarks());
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        claimRepository.save(claim);
+		claimRepository.save(claim);
 
-        historyService.saveStatusHistory(
-                claimId,
-                oldStatus,
-                ClaimStatus.RECOMMENDED_FOR_APPROVAL,
-                requestDto.getRemarks());
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.RECOMMENDED_FOR_APPROVAL,
+				requestDto.getRemarks());
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
-    
-    @Override
-    public ClaimResponseDto recommendClaimForRejection(
-            Long claimId,
-            ClaimRecommendationRequestDto requestDto) {
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        Claim claim = getClaimEntity(claimId);
+	@Override
+	public ClaimResponseDto recommendClaimForRejection(Long claimId, ClaimRecommendationRequestDto requestDto) {
 
-        if(claim.getClaimStatus() != ClaimStatus.UNDER_REVIEW) {
-            throw new InvalidClaimStatusException(
-                    "Claim must be under review");
-        }
+		Claim claim = getClaimEntity(claimId);
 
-        ClaimStatus oldStatus = claim.getClaimStatus();
+		if (claim.getClaimStatus() != ClaimStatus.UNDER_REVIEW) {
+			throw new InvalidClaimStatusException("Claim must be under review");
+		}
 
-        claim.setClaimStatus(
-                ClaimStatus.RECOMMENDED_FOR_REJECTION);
+		ClaimStatus oldStatus = claim.getClaimStatus();
 
-        claim.setAgentRemarks(
-                requestDto.getRemarks());
+		claim.setClaimStatus(ClaimStatus.RECOMMENDED_FOR_REJECTION);
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+		claim.setAgentRemarks(requestDto.getRemarks());
 
-        claimRepository.save(claim);
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        historyService.saveStatusHistory(
-                claimId,
-                oldStatus,
-                ClaimStatus.RECOMMENDED_FOR_REJECTION,
-                requestDto.getRemarks());
+		claimRepository.save(claim);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
-    
-    @Override
-    public ClaimResponseDto submitClaim(Long policyId,
-                                        ClaimRequestDto requestDto) {
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.RECOMMENDED_FOR_REJECTION,
+				requestDto.getRemarks());
 
-        Policy policy = policyRepository.findById(policyId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Policy not found"));
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        if(policy.getPolicyStatus() != PolicyStatus.ACTIVE)
-        {
-            throw new InvalidPolicyStatusException(
-                    "Claim can only be raised for active policies");
-        }
+	@Override
+	public ClaimResponseDto submitClaim(Long policyId, ClaimRequestDto requestDto) {
 
-        Claim claim = new Claim();
+		Policy policy = policyRepository.findById(policyId)
+				.orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
 
+		if (policy.getPolicyStatus() != PolicyStatus.ACTIVE) {
+			throw new InvalidPolicyStatusException("Claim can only be raised for active policies");
+		}
 
-        claim.setPolicy(policy);
+		if (claimRepository.existsByPolicyPolicyIdAndIncidentDate(policyId, requestDto.getIncidentDate())) {
 
-        claim.setClaimAmount(
-                requestDto.getClaimAmount());
+			throw new DuplicateResourceException("Claim already exists for this incident date");
+		}
 
-        claim.setClaimReason(
-                requestDto.getClaimReason());
+		Claim claim = new Claim();
 
-        claim.setIncidentDate(
-                requestDto.getIncidentDate());
+		claim.setClaimNumber("CLM" + System.currentTimeMillis());
 
-        claim.setClaimStatus(
-                ClaimStatus.SUBMITTED);
+		claim.setPolicy(policy);
 
-        claim.setCreatedDate(
-                LocalDateTime.now());
+		claim.setClaimAmount(requestDto.getClaimAmount());
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+		claim.setClaimReason(requestDto.getClaimReason());
 
-        claim = claimRepository.save(claim);
+		claim.setIncidentDate(requestDto.getIncidentDate());
 
-        historyService.saveStatusHistory(
-                claim.getClaimId(),
-                null,
-                ClaimStatus.SUBMITTED,
-                "Claim Submitted");
+		claim.setClaimStatus(ClaimStatus.SUBMITTED);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		claim.setCreatedDate(LocalDateTime.now());
 
-    @Override
-    public ClaimResponseDto reviewClaim(
-            Long claimId,
-            ClaimReviewRequestDto requestDto) {
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        Claim claim = getClaimEntity(claimId);
+		claim = claimRepository.save(claim);
 
-        if(claim.getClaimStatus() != ClaimStatus.SUBMITTED)
-        {
-            throw new InvalidClaimStatusException(
-                    "Only submitted claims can be reviewed");
-        }
+		historyService.saveStatusHistory(claim.getClaimId(), null, ClaimStatus.SUBMITTED, "Claim Submitted");
 
-        ClaimStatus oldStatus =
-                claim.getClaimStatus();
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        claim.setClaimStatus(
-                ClaimStatus.UNDER_REVIEW);
+	@Override
+	public ClaimResponseDto reviewClaim(Long claimId, ClaimReviewRequestDto requestDto) {
 
-        claim.setAgentRemarks(
-                requestDto.getRemarks());
+		Claim claim = getClaimEntity(claimId);
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+		if (claim.getClaimStatus() != ClaimStatus.SUBMITTED) {
+			throw new InvalidClaimStatusException("Only submitted claims can be reviewed");
+		}
 
-        claimRepository.save(claim);
+		ClaimStatus oldStatus = claim.getClaimStatus();
 
-        historyService.saveStatusHistory(
-                claimId,
-                oldStatus,
-                ClaimStatus.UNDER_REVIEW,
-                requestDto.getRemarks());
+		claim.setClaimStatus(ClaimStatus.UNDER_REVIEW);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		claim.setAgentRemarks(requestDto.getRemarks());
 
-   
-    
-    @Override
-    public ClaimResponseDto approveClaim(
-            Long claimId,
-            ClaimDecisionRequestDto requestDto) {
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        Claim claim = getClaimEntity(claimId);
+		claimRepository.save(claim);
 
-        if(claim.getClaimStatus()
-                != ClaimStatus.RECOMMENDED_FOR_APPROVAL) {
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.UNDER_REVIEW, requestDto.getRemarks());
 
-            throw new InvalidClaimStatusException(
-                    "Claim must be recommended for approval");
-        }
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        ClaimStatus oldStatus =
-                claim.getClaimStatus();
+	@Override
+	public ClaimResponseDto approveClaim(Long claimId, ClaimDecisionRequestDto requestDto) {
 
-        claim.setClaimStatus(
-                ClaimStatus.APPROVED);
+		Claim claim = getClaimEntity(claimId);
 
-        claim.setAdminRemarks(
-                requestDto.getRemarks());
+		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_APPROVAL) {
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+			throw new InvalidClaimStatusException("Claim must be recommended for approval");
+		}
 
-        claimRepository.save(claim);
+		ClaimStatus oldStatus = claim.getClaimStatus();
 
-        historyService.saveStatusHistory(
-                claimId,
-                oldStatus,
-                ClaimStatus.APPROVED,
-                requestDto.getRemarks());
+		claim.setClaimStatus(ClaimStatus.APPROVED);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		claim.setAdminRemarks(requestDto.getRemarks());
 
-    @Override
-    public ClaimResponseDto rejectClaim(
-            Long claimId,
-            ClaimDecisionRequestDto requestDto) {
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        Claim claim = getClaimEntity(claimId);
+		claimRepository.save(claim);
 
-        if(claim.getClaimStatus()
-                != ClaimStatus.RECOMMENDED_FOR_REJECTION) {
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.APPROVED, requestDto.getRemarks());
 
-            throw new InvalidClaimStatusException(
-                    "Claim must be recommended for rejection");
-        }
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        ClaimStatus oldStatus =
-                claim.getClaimStatus();
+	@Override
+	public ClaimResponseDto rejectClaim(Long claimId, ClaimDecisionRequestDto requestDto) {
 
-        claim.setClaimStatus(
-                ClaimStatus.REJECTED);
+		Claim claim = getClaimEntity(claimId);
 
-        claim.setAdminRemarks(
-                requestDto.getRemarks());
+		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_REJECTION) {
 
-        claim.setUpdatedDate(
-                LocalDateTime.now());
+			throw new InvalidClaimStatusException("Claim must be recommended for rejection");
+		}
 
-        claimRepository.save(claim);
+		ClaimStatus oldStatus = claim.getClaimStatus();
 
-        historyService.saveStatusHistory(
-                claimId,
-                oldStatus,
-                ClaimStatus.REJECTED,
-                requestDto.getRemarks());
+		claim.setClaimStatus(ClaimStatus.REJECTED);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		claim.setAdminRemarks(requestDto.getRemarks());
 
-    @Override
-    public ClaimResponseDto getClaimById(Long claimId) {
+		claim.setUpdatedDate(LocalDateTime.now());
 
-        Claim claim = getClaimEntity(claimId);
+		claimRepository.save(claim);
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.REJECTED, requestDto.getRemarks());
 
-    @Override
-    public ClaimResponseDto getClaimByClaimNumber(
-            String claimNumber) {
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-        Claim claim = claimRepository
-                .findByClaimNumber(claimNumber)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Claim not found"));
+	@Override
+	public ClaimResponseDto getClaimById(Long claimId) {
 
-        return mapper.map(claim,
-                ClaimResponseDto.class);
-    }
+		Claim claim = getClaimEntity(claimId);
 
-    @Override
-    public Page<ClaimResponseDto> getClaimsByCustomer(
-            Long customerId,
-            Pageable pageable) {
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-    	return claimRepository
-    	        .findByPolicy_Customer_CustomerId(
-    	                customerId,
-    	                pageable)
-    	        .map(claim ->
-    	                mapper.map(claim,
-    	                        ClaimResponseDto.class));
-    }
+	@Override
+	public ClaimResponseDto getClaimByClaimNumber(String claimNumber) {
 
-    @Override
-    public Page<ClaimResponseDto> getAllClaims(
-            Pageable pageable) {
+		Claim claim = claimRepository.findByClaimNumber(claimNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
 
-        return claimRepository
-                .findAll(pageable)
-                .map(claim ->
-                        mapper.map(claim,
-                                ClaimResponseDto.class));
-    }
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 
-    private Claim getClaimEntity(Long claimId) {
+	@Override
+	public Page<ClaimResponseDto> getClaimsByCustomer(Long customerId, Pageable pageable) {
 
-        return claimRepository.findById(claimId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Claim not found"));
-    }
+		return claimRepository.findByPolicy_Customer_CustomerId(customerId, pageable)
+				.map(claim -> mapper.map(claim, ClaimResponseDto.class));
+	}
+
+	@Override
+	public Page<ClaimResponseDto> getAllClaims(Pageable pageable) {
+
+		return claimRepository.findAll(pageable).map(claim -> mapper.map(claim, ClaimResponseDto.class));
+	}
+
+	private Claim getClaimEntity(Long claimId) {
+
+		return claimRepository.findById(claimId).orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
+	}
+
+	@Override
+	public Page<ClaimResponseDto> getClaimsByPolicy(Long policyId, Pageable pageable) {
+
+		return claimRepository.findByPolicyPolicyId(policyId, pageable)
+				.map(claim -> mapper.map(claim, ClaimResponseDto.class));
+	}
+
+	@Override
+	public ClaimResponseDto withdrawClaim(Long claimId) {
+
+		Claim claim = getClaimEntity(claimId);
+
+		if (claim.getClaimStatus() != ClaimStatus.SUBMITTED) {
+
+			throw new InvalidClaimStatusException("Only submitted claims can be withdrawn");
+		}
+
+		ClaimStatus oldStatus = claim.getClaimStatus();
+
+		claim.setClaimStatus(ClaimStatus.WITHDRAWN);
+
+		claim.setUpdatedDate(LocalDateTime.now());
+
+		claimRepository.save(claim);
+
+		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.WITHDRAWN, "Claim Withdrawn");
+
+		return mapper.map(claim, ClaimResponseDto.class);
+	}
 }

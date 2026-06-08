@@ -1,5 +1,7 @@
 package com.monocept.demo.dto.request;
 
+import com.monocept.demo.enums.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,4 +26,6 @@ public class RegisterRequestDto {
 
     @Size(min = 6, message = "Password must contain at least 6 characters")
     private String password;
+    
+    private Role role;
 }

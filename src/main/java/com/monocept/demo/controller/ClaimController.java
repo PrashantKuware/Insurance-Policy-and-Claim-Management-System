@@ -36,6 +36,18 @@ public class ClaimController {
 		return new ResponseEntity<>(claimService.submitClaim(policyId, requestDto), HttpStatus.CREATED);
 	}
 
+	@GetMapping("/policy/{policyId}")
+	public ResponseEntity<Page<ClaimResponseDto>> getClaimsByPolicy(@PathVariable Long policyId, Pageable pageable) {
+
+		return ResponseEntity.ok(claimService.getClaimsByPolicy(policyId, pageable));
+	}
+
+	@PutMapping("/{claimId}/withdraw")
+	public ResponseEntity<ClaimResponseDto> withdrawClaim(@PathVariable Long claimId) {
+
+		return ResponseEntity.ok(claimService.withdrawClaim(claimId));
+	}
+
 	@PutMapping("/{claimId}/review")
 	public ResponseEntity<ClaimResponseDto> reviewClaim(@PathVariable Long claimId,
 			@Valid @RequestBody ClaimReviewRequestDto requestDto) {
