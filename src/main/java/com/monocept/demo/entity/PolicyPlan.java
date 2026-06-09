@@ -57,7 +57,7 @@ public class PolicyPlan {
 	@Positive(message = "Duration must be +ve")
 	private Integer duration;
 
-	@Column(columnDefinition = "TEXT")
+	@Column()
 	private String termsConditions;
 
 	private Boolean active = true;

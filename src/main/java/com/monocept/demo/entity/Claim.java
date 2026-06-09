@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,11 +47,14 @@ public class Claim {
     private Policy policy;
 
     @Positive(message = "Claim amount must be greater than 0")
+    @NotNull(message = "Amount should be there")
     private BigDecimal claimAmount;
 
     @Column(columnDefinition = "TEXT")
+    @NotNull(message = "claimReason should be there")
     private String claimReason;
-
+    
+    @NotNull(message = "incidentDate should be there")
     private LocalDate incidentDate;
 
     @Enumerated(EnumType.STRING)

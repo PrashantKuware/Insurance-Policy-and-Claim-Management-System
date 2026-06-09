@@ -2,6 +2,7 @@ package com.monocept.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,21 +29,30 @@ public class CustomerController {
 
 	private final CustomerService customerService;
 
-	@PostMapping("/{userId}")
-	public ApiResponse<CustomerResponseDto> createCustomer(@PathVariable Long userId,
-			@Valid @RequestBody CustomerRequestDto request) {
+//	@PostMapping("/{userId}")
+//	public ApiResponse<CustomerResponseDto> createCustomer(@PathVariable Long userId,
+//			@Valid @RequestBody CustomerRequestDto request) {
+//
+//		CustomerResponseDto response = customerService.createCustomer(userId, request);
+//
+//		return ApiResponse.<CustomerResponseDto>builder().success(true).message("Customer profile created successfully")
+//				.data(response).timestamp(LocalDateTime.now()).build();
+//	}
 
-		CustomerResponseDto response = customerService.createCustomer(userId, request);
+	@PostMapping
+	public ApiResponse<CustomerResponseDto> createCustomer(@Valid @RequestBody CustomerRequestDto request) {
+
+		CustomerResponseDto response = customerService.createCustomer(request);
 
 		return ApiResponse.<CustomerResponseDto>builder().success(true).message("Customer profile created successfully")
 				.data(response).timestamp(LocalDateTime.now()).build();
 	}
 
-	@GetMapping("/agent/{agentId}")
-	public Page<CustomerResponseDto> getCustomersByAgent(@PathVariable Long agentId, Pageable pageable) {
-
-		return customerService.getCustomersByAgent(agentId, pageable);
-	}
+//	@GetMapping("/agent/{agentId}")
+//	public Page<CustomerResponseDto> getCustomersByAgent(@PathVariable Long agentId, Pageable pageable) {
+//
+//		return customerService.getCustomersByAgent(agentId, pageable);
+//	}
 
 	@GetMapping("/")
 	public ApiResponse<List<CustomerResponseDto>> getAllCustomers() {
@@ -71,12 +81,12 @@ public class CustomerController {
 				.data("Customer removed").timestamp(LocalDateTime.now()).build();
 	}
 
-	@PutMapping("/{customerId}")
-	public ApiResponse<CustomerResponseDto> updateCustomerById(@PathVariable Long customerId,
-			@Valid @RequestBody CustomerRequestDto customerRequestDto) {
-		CustomerResponseDto response = customerService.updateCustomer(customerId, customerRequestDto);
+	@PutMapping
+	public ApiResponse<CustomerResponseDto> updateCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
 
-		return ApiResponse.<CustomerResponseDto>builder().success(true).message("Customer update successfully")
+		CustomerResponseDto response = customerService.updateCustomer(customerRequestDto);
+
+		return ApiResponse.<CustomerResponseDto>builder().success(true).message("Customer updated successfully")
 				.data(response).timestamp(LocalDateTime.now()).build();
 	}
 }

@@ -11,15 +11,17 @@ import com.monocept.demo.dto.response.CustomerResponseDto;
 @Service
 public interface CustomerService {
 
-	CustomerResponseDto createCustomer(Long userId, CustomerRequestDto customerRequestDto);
+//	CustomerResponseDto createCustomer(Long userId, CustomerRequestDto customerRequestDto);
+	CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto);
 
 	List<CustomerResponseDto> getAllCustomers();
 
 	CustomerResponseDto getCustomerById(Long customerId);
 
-	CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto);
+//	CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto);
+	CustomerResponseDto updateCustomer(CustomerRequestDto customerRequestDto);
 
 	void deleteCustomer(Long customerId);
 
-	Page<CustomerResponseDto> getCustomersByAgent(Long agentId, Pageable pageable);
+//	Page<CustomerResponseDto> getCustomersByAgent(Long agentId, Pageable pageable);
 }

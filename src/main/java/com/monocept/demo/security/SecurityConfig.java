@@ -50,9 +50,8 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.PATCH, "/api/auth/status/**").hasRole("ADMIN")
 
 						// CUSTOMER
+						.requestMatchers(HttpMethod.PUT, "/api/customer").hasRole("CUSTOMER")
 						.requestMatchers(HttpMethod.POST, "/api/customer/**").hasAnyRole("CUSTOMER")
-
-						.requestMatchers(HttpMethod.PUT, "/api/customer/**").hasAnyRole("CUSTOMER")
 
 						.requestMatchers(HttpMethod.DELETE, "/api/customer/**").hasRole("ADMIN")
 
@@ -83,12 +82,12 @@ public class SecurityConfig {
 						// POLICIES
 
 						.requestMatchers(HttpMethod.POST, "/api/policies/purchase").hasRole("CUSTOMER")
-
 						.requestMatchers(HttpMethod.POST, "/api/policies/issue").hasAnyRole("ADMIN", "AGENT")
 
 						.requestMatchers(HttpMethod.GET, "/api/policies/**").hasAnyRole("ADMIN", "AGENT", "CUSTOMER")
 
 						.requestMatchers(HttpMethod.PATCH, "/api/policies/**").hasAnyRole("ADMIN", "AGENT")
+						.requestMatchers(HttpMethod.GET, "/api/policies/my-policies").hasRole("CUSTOMER")
 
 						// PAYMENTS
 						// PAYMENTS

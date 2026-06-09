@@ -27,11 +27,11 @@ public class PolicyController {
 	}
 
 	// ADMIN / AGENT
-	@PostMapping("/issue")
-	public PolicyResponseDto issuePolicy(@RequestParam Long customerId, @RequestParam Long planId) {
-
-		return policyService.issuePolicy(customerId, planId);
-	}
+//	@PostMapping("/issue")
+//	public PolicyResponseDto issuePolicy(@RequestParam Long customerId, @RequestParam Long planId) {
+//
+//		return policyService.issuePolicy(customerId, planId);
+//	}
 
 	// CUSTOMER(own), ADMIN, AGENT
 	@GetMapping("/{policyId}")
@@ -40,11 +40,10 @@ public class PolicyController {
 		return policyService.getPolicyById(policyId);
 	}
 
-	// CUSTOMER(own), ADMIN, AGENT
-	@GetMapping("/customer/{customerId}")
-	public List<PolicyResponseDto> getPoliciesByCustomer(@PathVariable Long customerId) {
+	@GetMapping("/my-policies")
+	public List<PolicyResponseDto> getMyPolicies() {
 
-		return policyService.getPoliciesByCustomer(customerId);
+	    return policyService.getPoliciesByCustomer();
 	}
 
 	// ADMIN / AGENT

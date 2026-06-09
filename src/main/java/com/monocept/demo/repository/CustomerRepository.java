@@ -10,7 +10,9 @@ import com.monocept.demo.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-	Page<Customer> findByAgentUserId(Long agentId, Pageable pageable);
+//	Page<Customer> findByAgentUserId(Long agentId, Pageable pageable);
 	
 	Optional<Customer> findByUserUserId(Long userId);
+	
+	boolean existsByUserUserId(Long userId);
 }

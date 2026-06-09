@@ -43,14 +43,15 @@ public class PolicyServiceImpl implements PolicyService {
 	@Override
 	public PolicyResponseDto purchasePolicy(PolicyPurchaseRequestDto dto) {
 
-		Customer customer = customerRepository.findById(dto.getCustomerId())
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+		User loggedInUser = getLoggedInUser();
+
+		Customer customer = customerRepository.findByUserUserId(loggedInUser.getUserId())
+				.orElseThrow(() -> new ResourceNotFoundException("Customer profile not found"));
 
 		PolicyPlan plan = planRepository.findById(dto.getPlanId())
 				.orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
 
 		if (!plan.getActive()) {
-
 			throw new ValidationException("Selected plan is inactive");
 		}
 
@@ -63,22 +64,15 @@ public class PolicyServiceImpl implements PolicyService {
 	}
 
 	@Override
-	public List<PolicyResponseDto> getPoliciesByCustomer(Long customerId) {
+	public List<PolicyResponseDto> getPoliciesByCustomer() {
 
 		User loggedInUser = getLoggedInUser();
 
-		if (loggedInUser.getRole() == Role.CUSTOMER) {
+		Customer customer = customerRepository.findByUserUserId(loggedInUser.getUserId())
+				.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-			Customer customer = customerRepository.findByUserUserId(loggedInUser.getUserId())
-					.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-
-			if (!customer.getCustomerId().equals(customerId)) {
-
-				throw new ForbiddenAccessException("You can view only your policies");
-			}
-		}
-
-		return policyRepository.findByCustomerCustomerId(customerId).stream().map(this::mapToResponse).toList();
+		return policyRepository.findByCustomerCustomerId(customer.getCustomerId()).stream().map(this::mapToResponse)
+				.toList();
 	}
 
 	private PolicyResponseDto mapToResponse(Policy policy) {
@@ -90,16 +84,16 @@ public class PolicyServiceImpl implements PolicyService {
 				.totalPremiumPaid(policy.getTotalPremiumPaid()).build();
 	}
 
-	@Override
-	public PolicyResponseDto issuePolicy(Long customerId, Long planId) {
-
-		PolicyPurchaseRequestDto dto = new PolicyPurchaseRequestDto();
-
-		dto.setCustomerId(customerId);
-		dto.setPlanId(planId);
-
-		return purchasePolicy(dto);
-	}
+//	@Override
+//	public PolicyResponseDto issuePolicy(Long customerId, Long planId) {
+//
+//		PolicyPurchaseRequestDto dto = new PolicyPurchaseRequestDto();
+//
+//		dto.setCustomerId(customerId);
+//		dto.setPlanId(planId);
+//
+//		return purchasePolicy(dto);
+//	}
 
 	@Override
 	public Page<PolicyResponseDto> getAllPolicies(int pageNo, int pageSize, String sortBy) {

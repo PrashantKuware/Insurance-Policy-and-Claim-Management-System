@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class InsuranceProduct {
     @Column(nullable = false)
     private ProductType productType;
 
+    @NotNull(message = "desc should be there")
     private String description;
 
     private Boolean active = true;

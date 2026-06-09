@@ -13,7 +13,7 @@ public class CustomerResponseDto {
 
     private String email;
 
-    private Long agentId;
+//    private Long agentId;
 
     private String agentName;
 

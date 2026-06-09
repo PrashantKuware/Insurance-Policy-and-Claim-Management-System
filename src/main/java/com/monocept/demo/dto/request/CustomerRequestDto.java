@@ -3,13 +3,15 @@ package com.monocept.demo.dto.request;
 import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 @Data
 public class CustomerRequestDto {
 
-    private Long agentId;
+//    private Long agentId;
 
+    @Past(message = "Date not in future")
     private LocalDate dateOfBirth;
 
     @NotBlank

@@ -7,8 +7,5 @@ import lombok.Data;
 public class PolicyPurchaseRequestDto {
 
     @NotNull
-    private Long customerId;
-
-    @NotNull
     private Long planId;
 }

@@ -12,11 +12,11 @@ public interface PolicyService
 
 	PolicyResponseDto purchasePolicy(PolicyPurchaseRequestDto dto);
 
-	PolicyResponseDto issuePolicy(Long customerId, Long planId);
+//	PolicyResponseDto issuePolicy(Long customerId, Long planId);
 
 	PolicyResponseDto getPolicyById(Long policyId);
 
-	List<PolicyResponseDto> getPoliciesByCustomer(Long customerId);
+	List<PolicyResponseDto> getPoliciesByCustomer();
 
 	Page<PolicyResponseDto> getAllPolicies(int pageNo, int pageSize, String sortBy);
 

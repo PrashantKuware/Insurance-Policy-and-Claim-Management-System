@@ -174,7 +174,7 @@ public class ClaimServiceImpl implements ClaimService {
 		validateClaimNotFinalized(claim);
 
 		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_APPROVAL) {
-			throw new InvalidClaimStatusException("Claim must be RECOMMENDED_FOR_APPROVAL");
+			throw new InvalidClaimStatusException("Claim must be RECOMMENDED_FOR_APPROVAL or UNDER_REVIEW");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
@@ -200,8 +200,7 @@ public class ClaimServiceImpl implements ClaimService {
 		validateClaimNotFinalized(claim);
 
 		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_REJECTION) {
-		    throw new InvalidClaimStatusException(
-		            "Claim must be under review");
+			throw new InvalidClaimStatusException("Claim must be under review");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
@@ -270,8 +269,7 @@ public class ClaimServiceImpl implements ClaimService {
 
 		if (claim.getClaimStatus() != ClaimStatus.SUBMITTED) {
 
-		    throw new InvalidClaimStatusException(
-		            "Only submitted claims can be withdrawn");
+			throw new InvalidClaimStatusException("Only submitted claims can be withdrawn");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
