@@ -19,40 +19,43 @@ public class PolicyController {
 
 	private final PolicyService policyService;
 
+	// CUSTOMER
 	@PostMapping("/purchase")
 	public PolicyResponseDto purchasePolicy(@Valid @RequestBody PolicyPurchaseRequestDto dto) {
 
 		return policyService.purchasePolicy(dto);
 	}
 
+	// ADMIN / AGENT
 	@PostMapping("/issue")
 	public PolicyResponseDto issuePolicy(@RequestParam Long customerId, @RequestParam Long planId) {
 
 		return policyService.issuePolicy(customerId, planId);
 	}
 
+	// CUSTOMER(own), ADMIN, AGENT
 	@GetMapping("/{policyId}")
 	public PolicyResponseDto getPolicyById(@PathVariable Long policyId) {
 
 		return policyService.getPolicyById(policyId);
 	}
 
+	// CUSTOMER(own), ADMIN, AGENT
 	@GetMapping("/customer/{customerId}")
 	public List<PolicyResponseDto> getPoliciesByCustomer(@PathVariable Long customerId) {
 
 		return policyService.getPoliciesByCustomer(customerId);
 	}
 
+	// ADMIN / AGENT
 	@GetMapping
 	public Page<PolicyResponseDto> getAllPolicies(@RequestParam(defaultValue = "0") int pageNo,
-
-			@RequestParam(defaultValue = "10") int pageSize,
-
-			@RequestParam(defaultValue = "policyId") String sortBy) {
+			@RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "policyId") String sortBy) {
 
 		return policyService.getAllPolicies(pageNo, pageSize, sortBy);
 	}
 
+	// ADMIN / AGENT
 	@PatchMapping("/{policyId}/activate")
 	public String activatePolicy(@PathVariable Long policyId) {
 
@@ -61,6 +64,7 @@ public class PolicyController {
 		return "Policy activated successfully";
 	}
 
+	// ADMIN / AGENT
 	@PatchMapping("/{policyId}/cancel")
 	public String cancelPolicy(@PathVariable Long policyId) {
 

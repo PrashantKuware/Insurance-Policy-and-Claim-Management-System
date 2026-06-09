@@ -19,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,13 +45,16 @@ public class PolicyPlan {
 
 	private String planName;
 
+	@Positive(message = "Amount must be +ve")
 	private BigDecimal coverageAmount;
 
+	@Positive(message = "Amount must be +ve")
 	private BigDecimal premiumAmount;
 
 	@Enumerated(EnumType.STRING)
 	private PremiumType premiumType;
 
+	@Positive(message = "Duration must be +ve")
 	private Integer duration;
 
 	@Column(columnDefinition = "TEXT")

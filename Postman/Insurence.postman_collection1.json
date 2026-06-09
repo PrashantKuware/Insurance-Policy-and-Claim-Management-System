@@ -18,7 +18,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDM3ODEsImV4cCI6MTc4MDkwOTc4MX0.CGlmYYtobP5E-2MWkc0qWF3tS8eyjUZln-lzcBWgCLyxhBqQYdjlCMPCswL0sYvb",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MTI2MzIsImV4cCI6MTc4MDkxODYzMn0.Zwm_W6VoQtEaPljjVW7UiDQ4Lles3X_SvN-HN8yhSOFRAFKjg7Vbw-6S2yJ0uKLt",
                   "type": "string"
                 }
               ]
@@ -27,7 +27,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// {\r\n//     \"productName\": \"Health Insurance\",\r\n//     \"productType\": \"HEALTH\",\r\n//     \"description\": \"Provides medical coverage for hospitalization and treatment expenses\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Motor Insurance\",\r\n//     \"productType\": \"MOTOR\",\r\n//     \"description\": \"Provides coverage for vehicle damage, theft and accidents\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Life Insurance\",\r\n//     \"productType\": \"LIFE\",\r\n//     \"description\": \"Provides financial protection to nominee in case of policyholder death\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Travel Insurance\",\r\n//     \"productType\": \"TRAVEL\",\r\n//     \"description\": \"Provides protection against travel related risks and emergencies\"\r\n// }",
+              "raw": "{\r\n    \"productName\": \"Health Insurance\",\r\n    \"productType\": \"HEALTH\",\r\n    \"description\": \"Provides medical coverage for hospitalization and treatment expenses\"\r\n}\r\n\r\n// {\r\n//     \"productName\": \"Motor Insurance\",\r\n//     \"productType\": \"MOTOR\",\r\n//     \"description\": \"Provides coverage for vehicle damage, theft and accidents\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Life Insurance\",\r\n//     \"productType\": \"LIFE\",\r\n//     \"description\": \"Provides financial protection to nominee in case of policyholder death\"\r\n// }\r\n\r\n// {\r\n//     \"productName\": \"Travel Insurance\",\r\n//     \"productType\": \"TRAVEL\",\r\n//     \"description\": \"Provides protection against travel related risks and emergencies\"\r\n// }",
               "options": {
                 "raw": {
                   "language": "json"
@@ -221,7 +221,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDE5MTIsImV4cCI6MTc4MDkwNzkxMn0.Cc4inxoyrf6cFRfseA0ADSOLAyv42NaDOXV-jn78iBqALqcvFfLRKKUOqYEgSuLq",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MTQwNTQsImV4cCI6MTc4MDkyMDA1NH0.LvFc2DGWnE0vM1dYKGYTsvhpE-aoZN96gawesUh2D9mOA38J5ds31fuGebua97Mp",
                   "type": "string"
                 }
               ]
@@ -238,7 +238,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/customer/5",
+              "raw": "http://localhost:8080/api/customer/3",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -247,7 +247,7 @@
               "path": [
                 "api",
                 "customer",
-                "5"
+                "3"
               ]
             }
           },
@@ -296,6 +296,16 @@
         {
           "name": "delete customer",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZ2VudDJAZ21haWwuY29tIiwiaWF0IjoxNzgwOTEyMTM4LCJleHAiOjE3ODA5MTgxMzh9.fKO98uWPy7UZ_FQIi7uwwOEckMmeDIwzV2hRbNpSZTh29TxJY5bRjexFPCBPjG3F",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "DELETE",
             "header": [],
             "body": {
@@ -303,7 +313,7 @@
               "raw": "{\r\n    \"dateOfBirth\": \"2003-05-20\",\r\n    \"address\": \"Shahdara\",\r\n    \"city\": \"Delhi\",\r\n    \"state\": \"Delhi\",\r\n    \"pinCode\": \"110032\",\r\n    \"nomineeName\": \"Bramit Gupta\",\r\n    \"nomineeRelation\": \"Brother\"\r\n}"
             },
             "url": {
-              "raw": "http://localhost:8080/api/customer/5",
+              "raw": "http://localhost:8080/api/customer/3 ",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -312,7 +322,7 @@
               "path": [
                 "api",
                 "customer",
-                "5"
+                "3 "
               ]
             }
           },
@@ -393,7 +403,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDM3ODEsImV4cCI6MTc4MDkwOTc4MX0.CGlmYYtobP5E-2MWkc0qWF3tS8eyjUZln-lzcBWgCLyxhBqQYdjlCMPCswL0sYvb",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MTI2MzIsImV4cCI6MTc4MDkxODYzMn0.Zwm_W6VoQtEaPljjVW7UiDQ4Lles3X_SvN-HN8yhSOFRAFKjg7Vbw-6S2yJ0uKLt",
                   "type": "string"
                 }
               ]
@@ -402,7 +412,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Silver Plan\",\r\n//     \"coverageAmount\": 300000,\r\n//     \"premiumAmount\": 5000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Basic health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Gold Plan\",\r\n//     \"coverageAmount\": 500000,\r\n//     \"premiumAmount\": 10000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Extended health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Platinum Plan\",\r\n//     \"coverageAmount\": 1000000,\r\n//     \"premiumAmount\": 20000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Premium health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 2,\r\n//     \"planName\": \"Comprehensive Motor Plan\",\r\n//     \"coverageAmount\": 700000,\r\n//     \"premiumAmount\": 12000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Vehicle damage and theft coverage\"\r\n// }\r\n",
+              "raw": "// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Silver Plan\",\r\n//     \"coverageAmount\": 300000,\r\n//     \"premiumAmount\": 5000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Basic health insurance coverage\"\r\n// }\r\n\r\n{\r\n    \"productId\": 1,\r\n    \"planName\": \"Gold Plan\",\r\n    \"coverageAmount\": 500000,\r\n    \"premiumAmount\": 10000,\r\n    \"premiumType\": \"ANNUAL\",\r\n    \"duration\": 1,\r\n    \"termsConditions\": \"Extended health insurance coverage\"\r\n}\r\n\r\n// {\r\n//     \"productId\": 1,\r\n//     \"planName\": \"Platinum Plan\",\r\n//     \"coverageAmount\": 1000000,\r\n//     \"premiumAmount\": 20000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Premium health insurance coverage\"\r\n// }\r\n\r\n// {\r\n//     \"productId\": 2,\r\n//     \"planName\": \"Comprehensive Motor Plan\",\r\n//     \"coverageAmount\": 700000,\r\n//     \"premiumAmount\": 12000,\r\n//     \"premiumType\": \"ANNUAL\",\r\n//     \"duration\": 1,\r\n//     \"termsConditions\": \"Vehicle damage and theft coverage\"\r\n// }\r\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -596,7 +606,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"customerId\": 2,\r\n    \"planId\": 1\r\n}",
+              "raw": "{\r\n    \"customerId\": 2,\r\n    \"planId\": 3\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -782,7 +792,7 @@
             "method": "PATCH",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/policies/1/activate",
+              "raw": "http://localhost:8080/api/policies/8/activate",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -791,7 +801,7 @@
               "path": [
                 "api",
                 "policies",
-                "1",
+                "8",
                 "activate"
               ]
             }
@@ -911,7 +921,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"agent1@gmail.com\",\r\n    \"password\": \"agent123\"\r\n}",
+              "raw": "{\r\n    \"email\": \"agent2@gmail.com\",\r\n    \"password\": \"agent123\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1029,6 +1039,45 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "get all user",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MTQ2NTYsImV4cCI6MTc4MDkyMDY1Nn0.78pF_fqFyoaNX8gEztKQYIpcNFJ-ElSjI_F10BC8ZgK_ybiNt4nqti_HUdxcJbD5",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//   \"fullName\":\"Mayank Gupta\",\r\n//   \"email\":\"mayank@gmail.com\",\r\n//   \"password\":\"123456\",\r\n//   \"mobileNumber\":\"9876543210\",\r\n//   \"role\": \"CUSTOMER\"\r\n// }\r\n\r\n{\r\n  \"fullName\":\"Aman or Santi\",\r\n  \"email\":\"aman@gmail.com\",\r\n  \"password\":\"123456\",\r\n  \"mobileNumber\":\"9876543210\",\r\n  \"role\": \"CUSTOMER\"\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/get/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "get",
+                "3"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1060,7 +1109,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/payments/policy/1",
+              "raw": "http://localhost:8080/api/payments/policy/4",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1070,7 +1119,7 @@
                 "api",
                 "payments",
                 "policy",
-                "1"
+                "4"
               ]
             }
           },
@@ -1079,10 +1128,20 @@
         {
           "name": "get by id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/payments/1",
+              "raw": "http://localhost:8080/api/payments/2",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1091,7 +1150,7 @@
               "path": [
                 "api",
                 "payments",
-                "1"
+                "2"
               ]
             }
           },
@@ -1100,10 +1159,20 @@
         {
           "name": "get all payments",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/payments/policy/2?page=0&size=10",
+              "raw": "http://localhost:8080/api/payments/policy/1?page=0&size=10",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1113,7 +1182,7 @@
                 "api",
                 "payments",
                 "policy",
-                "2"
+                "1"
               ],
               "query": [
                 {
@@ -1132,10 +1201,20 @@
         {
           "name": "update payment status",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDYyNTAsImV4cCI6MTc4MDkxMjI1MH0.u8M1lJfddR0lpK0T_hyklTvtWV5bFSiUBWV_UTTlnY399q-QNfvwQkh4Chq9HoHz",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PATCH",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/payments/3/status?status=SUCCESS",
+              "raw": "http://localhost:8080/api/payments/2/status?status=SUCCESS",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1144,7 +1223,7 @@
               "path": [
                 "api",
                 "payments",
-                "3",
+                "2",
                 "status"
               ],
               "query": [
@@ -1163,13 +1242,23 @@
       "name": "Claim API",
       "item": [
         {
-          "name": "Submit Claim",
+          "name": "customer Submit Claim",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"claimAmount\": 50000,\r\n    \"claimReason\": \"Road Accident\",\r\n    \"incidentDate\": \"2026-06-01\"\r\n}",
+              "raw": "{\r\n  \"claimAmount\": 50000,\r\n  \"claimReason\": \"Bike accident\",\r\n  \"incidentDate\": \"2026-06-01\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1177,7 +1266,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/claims/policy/1",
+              "raw": "http://localhost:8080/api/claims/policy/8",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1187,7 +1276,7 @@
                 "api",
                 "claims",
                 "policy",
-                "1"
+                "8"
               ]
             }
           },
@@ -1196,6 +1285,16 @@
         {
           "name": "review claim",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZ2VudDFAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODAwLCJleHAiOjE3ODA5MDk4MDB9.9udNY9tIvAdUqJooDNcchpIrmFc9xWieBbDko1ke2uQX-0PcNG3vz2tQC7uY7Jx5",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
@@ -1208,7 +1307,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/claims/1/review",
+              "raw": "http://localhost:8080/api/claims/2/review",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1217,7 +1316,7 @@
               "path": [
                 "api",
                 "claims",
-                "1",
+                "2",
                 "review"
               ]
             }
@@ -1227,6 +1326,16 @@
         {
           "name": "Recommend Claim For Approval",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZ2VudDFAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODAwLCJleHAiOjE3ODA5MDk4MDB9.9udNY9tIvAdUqJooDNcchpIrmFc9xWieBbDko1ke2uQX-0PcNG3vz2tQC7uY7Jx5",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
@@ -1239,7 +1348,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/claims/1/recommend-approval",
+              "raw": "http://localhost:8080/api/claims/2/recommend-approval",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1248,7 +1357,7 @@
               "path": [
                 "api",
                 "claims",
-                "1",
+                "2",
                 "recommend-approval"
               ]
             }
@@ -1258,6 +1367,16 @@
         {
           "name": "Recommend Claim For Rejection",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZ2VudDFAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODAwLCJleHAiOjE3ODA5MDk4MDB9.9udNY9tIvAdUqJooDNcchpIrmFc9xWieBbDko1ke2uQX-0PcNG3vz2tQC7uY7Jx5",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
@@ -1270,7 +1389,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/claims/1/recommend-rejection",
+              "raw": "http://localhost:8080/api/claims/2/recommend-rejection",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1279,70 +1398,8 @@
               "path": [
                 "api",
                 "claims",
-                "1",
+                "2",
                 "recommend-rejection"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "approve claim",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"remarks\": \"Approved by admin\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/api/claims/1/approve",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "claims",
-                "1",
-                "approve"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "reject claim",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"remarks\": \"Documents are incomplete\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/api/claims/1/reject",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "claims",
-                "1",
-                "reject"
               ]
             }
           },
@@ -1351,6 +1408,16 @@
         {
           "name": "aprove by admin",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDYyNTAsImV4cCI6MTc4MDkxMjI1MH0.u8M1lJfddR0lpK0T_hyklTvtWV5bFSiUBWV_UTTlnY399q-QNfvwQkh4Chq9HoHz",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "PUT",
             "header": [],
             "body": {
@@ -1363,7 +1430,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/claims/1/approve",
+              "raw": "http://localhost:8080/api/claims/2/approve",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1372,7 +1439,7 @@
               "path": [
                 "api",
                 "claims",
-                "1",
+                "2",
                 "approve"
               ]
             }
@@ -1413,6 +1480,16 @@
         {
           "name": "get claim by id",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
@@ -1434,10 +1511,51 @@
         {
           "name": "get claim history",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZ2VudDFAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODAwLCJleHAiOjE3ODA5MDk4MDB9.9udNY9tIvAdUqJooDNcchpIrmFc9xWieBbDko1ke2uQX-0PcNG3vz2tQC7uY7Jx5",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/claims/customer/1?page=0&size=10",
+              "raw": "http://localhost:8080/api/claim-history/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "claim-history",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get claim by policy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/claims/policy/5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1446,8 +1564,70 @@
               "path": [
                 "api",
                 "claims",
-                "customer",
-                "1"
+                "policy",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "withdraw claim",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXlhbmtAZ21haWwuY29tIiwiaWF0IjoxNzgwOTAzODA3LCJleHAiOjE3ODA5MDk4MDd9.MAKA037S0J3VU3UIlXIfKOZ_v1TtQ03Jcyu9u7wj3M8B6iXWW5dis26pdTLDrV1x",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/claims/1/withdraw",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "claims",
+                "1",
+                "withdraw"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all claims",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3ODA5MDYyNTAsImV4cCI6MTc4MDkxMjI1MH0.u8M1lJfddR0lpK0T_hyklTvtWV5bFSiUBWV_UTTlnY399q-QNfvwQkh4Chq9HoHz",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/claims?page=0&size=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "claims"
               ],
               "query": [
                 {
@@ -1460,14 +1640,6 @@
                 }
               ]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "New Request",
-          "request": {
-            "method": "GET",
-            "header": []
           },
           "response": []
         }

@@ -1,5 +1,6 @@
 package com.monocept.demo.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import com.monocept.demo.entity.Claim;
 import com.monocept.demo.entity.Policy;
 import com.monocept.demo.enums.ClaimStatus;
 import com.monocept.demo.enums.PolicyStatus;
+import com.monocept.demo.exception.BadRequestException;
 import com.monocept.demo.exception.DuplicateResourceException;
 import com.monocept.demo.exception.InvalidClaimStatusException;
 import com.monocept.demo.exception.InvalidPolicyStatusException;
@@ -106,6 +108,13 @@ public class ClaimServiceImpl implements ClaimService {
 			throw new DuplicateResourceException("Claim already exists for this incident date");
 		}
 
+		BigDecimal coverageAmount = policy.getPolicyPlan().getCoverageAmount();
+
+		if (requestDto.getClaimAmount().compareTo(coverageAmount) > 0) {
+
+			throw new BadRequestException("Claim amount cannot exceed policy coverage amount");
+		}
+
 		Claim claim = new Claim();
 
 		claim.setClaimNumber("CLM" + System.currentTimeMillis());
@@ -136,6 +145,8 @@ public class ClaimServiceImpl implements ClaimService {
 
 		Claim claim = getClaimEntity(claimId);
 
+		validateClaimNotFinalized(claim);
+
 		if (claim.getClaimStatus() != ClaimStatus.SUBMITTED) {
 			throw new InvalidClaimStatusException("Only submitted claims can be reviewed");
 		}
@@ -160,9 +171,10 @@ public class ClaimServiceImpl implements ClaimService {
 
 		Claim claim = getClaimEntity(claimId);
 
-		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_APPROVAL) {
+		validateClaimNotFinalized(claim);
 
-			throw new InvalidClaimStatusException("Claim must be recommended for approval");
+		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_APPROVAL) {
+			throw new InvalidClaimStatusException("Claim must be RECOMMENDED_FOR_APPROVAL");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
@@ -185,9 +197,11 @@ public class ClaimServiceImpl implements ClaimService {
 
 		Claim claim = getClaimEntity(claimId);
 
-		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_REJECTION) {
+		validateClaimNotFinalized(claim);
 
-			throw new InvalidClaimStatusException("Claim must be recommended for rejection");
+		if (claim.getClaimStatus() != ClaimStatus.RECOMMENDED_FOR_REJECTION) {
+		    throw new InvalidClaimStatusException(
+		            "Claim must be under review");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
@@ -252,9 +266,12 @@ public class ClaimServiceImpl implements ClaimService {
 
 		Claim claim = getClaimEntity(claimId);
 
+		validateClaimNotFinalized(claim);
+
 		if (claim.getClaimStatus() != ClaimStatus.SUBMITTED) {
 
-			throw new InvalidClaimStatusException("Only submitted claims can be withdrawn");
+		    throw new InvalidClaimStatusException(
+		            "Only submitted claims can be withdrawn");
 		}
 
 		ClaimStatus oldStatus = claim.getClaimStatus();
@@ -268,5 +285,13 @@ public class ClaimServiceImpl implements ClaimService {
 		historyService.saveStatusHistory(claimId, oldStatus, ClaimStatus.WITHDRAWN, "Claim Withdrawn");
 
 		return mapper.map(claim, ClaimResponseDto.class);
+	}
+
+	private void validateClaimNotFinalized(Claim claim) {
+
+		if (claim.getClaimStatus() == ClaimStatus.APPROVED || claim.getClaimStatus() == ClaimStatus.REJECTED) {
+
+			throw new InvalidClaimStatusException("Approved or rejected claims cannot be modified");
+		}
 	}
 }

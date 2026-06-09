@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class PremiumPayment {
     @JoinColumn(name = "policy_id")
     private Policy policy;
 
+    @Positive(message = "Payment amount must be greater than 0")
     private BigDecimal amount;
 
     private LocalDateTime paymentDate;

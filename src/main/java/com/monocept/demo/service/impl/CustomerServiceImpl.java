@@ -1,17 +1,21 @@
 package com.monocept.demo.service.impl;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.monocept.demo.enums.Role;
+import org.springframework.stereotype.Service;
+
 import com.monocept.demo.dto.request.CustomerRequestDto;
 import com.monocept.demo.dto.response.CustomerResponseDto;
 import com.monocept.demo.entity.Customer;
 import com.monocept.demo.entity.User;
+import com.monocept.demo.enums.Role;
 import com.monocept.demo.exception.ResourceNotFoundException;
+import com.monocept.demo.exception.ValidationException;
 import com.monocept.demo.repository.CustomerRepository;
 import com.monocept.demo.repository.UserRepository;
 import com.monocept.demo.service.CustomerService;
@@ -66,7 +70,13 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new RuntimeException("Selected user is not an Agent");
 		}
 		Customer customer = new Customer();
+		if (customerRequestDto.getDateOfBirth() != null
+				&& Period.between(customerRequestDto.getDateOfBirth(), LocalDate.now()).getYears() < 18) {
+
+			throw new ValidationException("Customer must be at least 18 years old");
+		}
 		customer.setDateOfBirth(customerRequestDto.getDateOfBirth());
+
 		customer.setAddress(customerRequestDto.getAddress());
 		customer.setCity(customerRequestDto.getCity());
 		customer.setState(customerRequestDto.getState());
@@ -107,8 +117,13 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto) {
 		Customer customer = customerRepository.findById(customerId)
-				.orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+				.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
+		if (customerRequestDto.getDateOfBirth() != null
+				&& Period.between(customerRequestDto.getDateOfBirth(), LocalDate.now()).getYears() < 18) {
+
+			throw new ValidationException("Customer must be at least 18 years old");
+		}
 		customer.setDateOfBirth(customerRequestDto.getDateOfBirth());
 		customer.setAddress(customerRequestDto.getAddress());
 		customer.setCity(customerRequestDto.getCity());

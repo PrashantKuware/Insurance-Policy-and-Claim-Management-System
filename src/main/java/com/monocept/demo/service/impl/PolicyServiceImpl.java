@@ -1,15 +1,15 @@
 package com.monocept.demo.service.impl;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.monocept.demo.dto.request.PolicyPurchaseRequestDto;
@@ -17,11 +17,16 @@ import com.monocept.demo.dto.response.PolicyResponseDto;
 import com.monocept.demo.entity.Customer;
 import com.monocept.demo.entity.Policy;
 import com.monocept.demo.entity.PolicyPlan;
+import com.monocept.demo.entity.User;
 import com.monocept.demo.enums.PolicyStatus;
+import com.monocept.demo.enums.Role;
+import com.monocept.demo.exception.ForbiddenAccessException;
 import com.monocept.demo.exception.ResourceNotFoundException;
+import com.monocept.demo.exception.ValidationException;
 import com.monocept.demo.repository.CustomerRepository;
 import com.monocept.demo.repository.PolicyPlanRepository;
 import com.monocept.demo.repository.PolicyRepository;
+import com.monocept.demo.repository.UserRepository;
 import com.monocept.demo.service.PolicyService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +38,7 @@ public class PolicyServiceImpl implements PolicyService {
 	private final PolicyRepository policyRepository;
 	private final CustomerRepository customerRepository;
 	private final PolicyPlanRepository planRepository;
+	private final UserRepository userRepository;
 
 	@Override
 	public PolicyResponseDto purchasePolicy(PolicyPurchaseRequestDto dto) {
@@ -43,13 +49,13 @@ public class PolicyServiceImpl implements PolicyService {
 		PolicyPlan plan = planRepository.findById(dto.getPlanId())
 				.orElseThrow(() -> new ResourceNotFoundException("Plan not found"));
 
-		if (plan.getActive() == false) {
-			throw new IllegalStateException("Plan is inactive");
+		if (!plan.getActive()) {
+
+			throw new ValidationException("Selected plan is inactive");
 		}
 
 		Policy policy = Policy.builder().policyNumber("POL" + System.currentTimeMillis()).customer(customer)
-				.policyPlan(plan).policyStatus(PolicyStatus.PENDING_PAYMENT).totalPremiumPaid(BigDecimal.ZERO)
-				.createdDate(LocalDateTime.now()).build();
+				.policyPlan(plan).policyStatus(PolicyStatus.PENDING_PAYMENT).createdDate(LocalDateTime.now()).build();
 
 		policyRepository.save(policy);
 
@@ -59,24 +65,20 @@ public class PolicyServiceImpl implements PolicyService {
 	@Override
 	public List<PolicyResponseDto> getPoliciesByCustomer(Long customerId) {
 
-		List<Policy> policies = policyRepository.findByCustomerCustomerId(customerId);
+		User loggedInUser = getLoggedInUser();
 
-		List<PolicyResponseDto> response = new ArrayList<>();
+		if (loggedInUser.getRole() == Role.CUSTOMER) {
 
-		for (Policy policy : policies) {
-			response.add(mapToResponse(policy));
+			Customer customer = customerRepository.findByUserUserId(loggedInUser.getUserId())
+					.orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+			if (!customer.getCustomerId().equals(customerId)) {
+
+				throw new ForbiddenAccessException("You can view only your policies");
+			}
 		}
 
-		return response;
-	}
-
-	@Override
-	public PolicyResponseDto getPolicyById(Long policyId) {
-
-		Policy policy = policyRepository.findById(policyId)
-				.orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
-
-		return mapToResponse(policy);
+		return policyRepository.findByCustomerCustomerId(customerId).stream().map(this::mapToResponse).toList();
 	}
 
 	private PolicyResponseDto mapToResponse(Policy policy) {
@@ -121,6 +123,17 @@ public class PolicyServiceImpl implements PolicyService {
 	}
 
 	@Override
+	public PolicyResponseDto getPolicyById(Long policyId) {
+
+		Policy policy = policyRepository.findById(policyId)
+				.orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
+
+		validatePolicyAccess(policy);
+
+		return mapToResponse(policy);
+	}
+
+	@Override
 	public void activatePolicy(Long policyId) {
 
 		Policy policy = policyRepository.findById(policyId)
@@ -136,4 +149,28 @@ public class PolicyServiceImpl implements PolicyService {
 
 		policyRepository.save(policy);
 	}
+
+	private void validatePolicyAccess(Policy policy) {
+
+		User loggedInUser = getLoggedInUser();
+
+		if (loggedInUser.getRole() == Role.ADMIN || loggedInUser.getRole() == Role.AGENT) {
+			return;
+		}
+
+		Long ownerId = policy.getCustomer().getUser().getUserId();
+
+		if (!ownerId.equals(loggedInUser.getUserId())) {
+
+			throw new ForbiddenAccessException("You can access only your own policy");
+		}
+	}
+
+	private User getLoggedInUser() {
+
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	}
+
 }

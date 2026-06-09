@@ -1,6 +1,5 @@
 package com.monocept.demo.exception;
 
-import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,10 +8,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpServerErrorException.InternalServerError;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +48,18 @@ public class GlobalExceptionHandler {
 		log.warn("Illegal argument: {}", ex.getMessage());
 		return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
 
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
+
+		return buildResponse(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+	}
+
+	@ExceptionHandler(DisabledException.class)
+	public ResponseEntity<Map<String, Object>> handleDisabledException(DisabledException ex) {
+
+		return buildResponse(HttpStatus.FORBIDDEN, "User account is disabled");
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -99,7 +114,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
 		log.error("Unexpected error occurred", ex);
-		return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong.");
+		return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 	}
 
 	@ExceptionHandler(ForbiddenAccessException.class)
@@ -115,28 +130,35 @@ public class GlobalExceptionHandler {
 
 		return buildResponse(HttpStatus.BAD_REQUEST, "Invalid claim status.");
 	}
-	
+
 	@ExceptionHandler(InvalidPolicyStatusException.class)
 	public ResponseEntity<Map<String, Object>> handleInvalidPolicyStatusException(InvalidPolicyStatusException ex,
 			HttpServletRequest request) {
 
 		return buildResponse(HttpStatus.BAD_REQUEST, "Invalid Policy status.");
 	}
-	
+
 	@ExceptionHandler(UnauthorizedAccessException.class)
 	public ResponseEntity<Map<String, Object>> handleUnauthorizedAccessException(UnauthorizedAccessException ex,
 			HttpServletRequest request) {
 
 		return buildResponse(HttpStatus.UNAUTHORIZED, "You Are Unauthorized.");
 	}
-	
+
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException ex,
 			HttpServletRequest request) {
 
-		return buildResponse(HttpStatus.BAD_REQUEST, "Validation Error.");
+		return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
 	}
 	
+	@ExceptionHandler(InternalServerError.class)
+	public ResponseEntity<Map<String, Object>> handleInternalServerException(InternalServerError ex,
+			HttpServletRequest request) {
+
+		return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+	}
+
 	private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
 		Map<String, Object> error = new LinkedHashMap<>();
 		error.put("timestamp", LocalDateTime.now());

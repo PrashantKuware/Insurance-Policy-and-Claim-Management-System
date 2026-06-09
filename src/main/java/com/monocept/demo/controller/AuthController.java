@@ -3,6 +3,7 @@ package com.monocept.demo.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.monocept.demo.dto.request.LoginRequestDto;
 import com.monocept.demo.dto.request.RegisterRequestDto;
+import com.monocept.demo.dto.request.UserStatusUpdateDto;
 import com.monocept.demo.dto.response.AuthResponseDto;
 import com.monocept.demo.entity.User;
-import com.monocept.demo.security.JwtService;
 import com.monocept.demo.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -25,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
-
 
 	@PostMapping("/register")
 	public AuthResponseDto register(@Valid @RequestBody RegisterRequestDto request) {
@@ -39,10 +39,24 @@ public class AuthController {
 
 		return authService.loginUser(request);
 	}
-	
-	@GetMapping("/get/{userId}")
-	public List<User> getAllUser(@PathVariable Long userId) {
-		return authService.getAllUser(userId);
+
+	@GetMapping("/get")
+	public List<User> getAllUser() {
+		return authService.getAllUser();
+	}
+
+	@PostMapping("/agent")
+	public AuthResponseDto createAgent(@RequestBody RegisterRequestDto request) {
+
+		return authService.createAgent(request);
+	}
+
+	@PatchMapping("/{userId}/status")
+	public String updateStatus(@PathVariable Long userId, @RequestBody UserStatusUpdateDto dto) {
+
+		authService.updateUserStatus(userId, dto);
+
+		return "User status updated";
 	}
 
 }

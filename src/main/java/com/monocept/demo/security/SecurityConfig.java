@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.monocept.demo.exception.CustomAccessDeniedHandler;
+import com.monocept.demo.exception.CustomAuthenticationEntryPoint;
 
 @Configuration
 @EnableMethodSecurity
@@ -23,7 +24,10 @@ public class SecurityConfig {
 
 	@Autowired
 	private JwtAuthenticationFilter jwtFilter;
-	
+
+	@Autowired
+	private CustomAuthenticationEntryPoint authenticationEntryPoint;
+
 	@Autowired
 	private CustomAccessDeniedHandler accessDeniedHandler;
 
@@ -39,9 +43,11 @@ public class SecurityConfig {
 						// AUTH
 						.requestMatchers("/api/auth/register", "/api/auth/login", "/swagger-ui.html", "/swagger-ui/**",
 								"/v3/api-docs/**")
-						.permitAll()
-						
-						.requestMatchers("/api/auth/get").hasRole("ADMIN")
+						.permitAll().requestMatchers(HttpMethod.POST, "/api/auth/agent").hasRole("ADMIN")
+
+						.requestMatchers(HttpMethod.GET, "/api/auth/get/**").hasRole("ADMIN")
+
+						.requestMatchers(HttpMethod.PATCH, "/api/auth/status/**").hasRole("ADMIN")
 
 						// CUSTOMER
 						.requestMatchers(HttpMethod.POST, "/api/customer/**").hasAnyRole("CUSTOMER")
@@ -50,7 +56,7 @@ public class SecurityConfig {
 
 						.requestMatchers(HttpMethod.DELETE, "/api/customer/**").hasRole("ADMIN")
 
-						.requestMatchers(HttpMethod.GET, "/api/customer/**").hasAnyRole("CUSTOMER", "ADMIN", "AGENT")
+						.requestMatchers(HttpMethod.GET, "/api/customer/**").hasAnyRole("ADMIN", "AGENT")
 
 						// INSURANCE PRODUCTS
 						.requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("CUSTOMER", "ADMIN", "AGENT")
@@ -75,25 +81,31 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.DELETE, "/api/plans/**").hasRole("ADMIN")
 
 						// POLICIES
-						.requestMatchers(HttpMethod.POST, "/api/policies/**").hasAnyRole("ADMIN", "AGENT")
 
-						.requestMatchers(HttpMethod.GET, "/api/policies/**").hasAnyRole("ADMIN", "AGENT")
+						.requestMatchers(HttpMethod.POST, "/api/policies/purchase").hasRole("CUSTOMER")
+
+						.requestMatchers(HttpMethod.POST, "/api/policies/issue").hasAnyRole("ADMIN", "AGENT")
+
+						.requestMatchers(HttpMethod.GET, "/api/policies/**").hasAnyRole("ADMIN", "AGENT", "CUSTOMER")
 
 						.requestMatchers(HttpMethod.PATCH, "/api/policies/**").hasAnyRole("ADMIN", "AGENT")
 
-						.requestMatchers(HttpMethod.PUT, "/api/policies/**").hasAnyRole("ADMIN", "AGENT")
-
 						// PAYMENTS
-						.requestMatchers(HttpMethod.POST, "/api/payments/**").hasRole("CUSTOMER")
+						// PAYMENTS
 
+						// CUSTOMER + AGENT can record payment
+						.requestMatchers(HttpMethod.POST, "/api/payments/**").hasAnyRole("CUSTOMER", "AGENT")
+
+						// View payment
 						.requestMatchers(HttpMethod.GET, "/api/payments/**").hasAnyRole("CUSTOMER", "ADMIN", "AGENT")
 
-						.requestMatchers(HttpMethod.PUT, "/api/payments/**").hasRole("ADMIN")
-
+						// Update payment status
 						.requestMatchers(HttpMethod.PATCH, "/api/payments/**").hasRole("ADMIN")
 
 						// CLAIMS
 						.requestMatchers(HttpMethod.POST, "/api/claims/**").hasRole("CUSTOMER")
+
+						.requestMatchers(HttpMethod.PUT, "/api/claims/*/withdraw").hasRole("CUSTOMER")
 
 						.requestMatchers(HttpMethod.GET, "/api/claims/**").hasAnyRole("CUSTOMER", "ADMIN", "AGENT")
 
@@ -113,8 +125,8 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/api/claim-history/**").hasAnyRole("ADMIN", "AGENT")
 
 						.anyRequest().authenticated())
-				.exceptionHandling(ex -> ex
-				        .accessDeniedHandler(accessDeniedHandler))
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint)
+						.accessDeniedHandler(accessDeniedHandler))
 
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

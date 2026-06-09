@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class Claim {
     @JoinColumn(name = "policy_id")
     private Policy policy;
 
+    @Positive(message = "Claim amount must be greater than 0")
     private BigDecimal claimAmount;
 
     @Column(columnDefinition = "TEXT")
@@ -58,6 +60,7 @@ public class Claim {
 
     private String adminRemarks;
 
+    @Column(updatable = false)
     private LocalDateTime createdDate;
 
     private LocalDateTime updatedDate;
