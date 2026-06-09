@@ -48,6 +48,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private boolean emailVerified = false;
+
+    private boolean mobileVerified = false;
+    
     private Boolean active = true;
 
     @Column(updatable = false)

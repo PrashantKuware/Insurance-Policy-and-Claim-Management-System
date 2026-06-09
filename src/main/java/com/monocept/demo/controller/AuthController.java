@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.monocept.demo.dto.request.LoginRequestDto;
@@ -32,6 +33,22 @@ public class AuthController {
 
 		return authService.registerUser(request);
 
+	}
+
+	@PostMapping("/send-email-otp")
+	public String sendEmailOtp(@RequestParam String email) {
+		authService.sendEmailOtp(email);
+		return "Email OTP Sent";
+	}
+
+	@PostMapping("/send-mobile-otp")
+	public String sendMobileOtp(
+	        @RequestParam String mobileNumber) {
+	    System.out.println("Received = [" + mobileNumber + "]");
+
+	    authService.sendMobileOtp(mobileNumber);
+
+	    return "Mobile OTP Sent Successfully";
 	}
 
 	@PostMapping("/login")

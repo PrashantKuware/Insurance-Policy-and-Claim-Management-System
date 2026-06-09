@@ -22,4 +22,8 @@ public interface AuthService {
 	AuthResponseDto createAgent(RegisterRequestDto request);
 
 	void updateUserStatus(Long userId, UserStatusUpdateDto dto);
+	
+	void sendEmailOtp(String email);
+	
+	void sendMobileOtp(String mobileNumber);
 }

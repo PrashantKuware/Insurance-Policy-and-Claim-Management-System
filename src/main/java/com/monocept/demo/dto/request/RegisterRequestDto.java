@@ -21,4 +21,7 @@ public class RegisterRequestDto {
 
 	@Size(min = 6, message = "Password must contain at least 6 characters")
 	private String password;
+	
+	private String emailOtp;
+	private String mobileOtp;
 }

@@ -1,5 +1,6 @@
 package com.monocept.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,15 +13,18 @@ import com.monocept.demo.dto.request.LoginRequestDto;
 import com.monocept.demo.dto.request.RegisterRequestDto;
 import com.monocept.demo.dto.request.UserStatusUpdateDto;
 import com.monocept.demo.dto.response.AuthResponseDto;
+import com.monocept.demo.entity.OtpVerification;
 import com.monocept.demo.entity.User;
 import com.monocept.demo.enums.Role;
 import com.monocept.demo.exception.DuplicateResourceException;
-import com.monocept.demo.exception.ForbiddenAccessException;
 import com.monocept.demo.exception.ResourceNotFoundException;
+import com.monocept.demo.repository.OtpRepository;
 import com.monocept.demo.repository.UserRepository;
 import com.monocept.demo.security.CustomUserDetails;
 import com.monocept.demo.security.JwtService;
 import com.monocept.demo.service.AuthService;
+import com.monocept.demo.service.EmailService;
+import com.monocept.demo.service.SmsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,31 +36,59 @@ public class AuthServiceImpl implements AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
 	private final PasswordEncoder passwordEncoder;
+	private final OtpRepository otpRepository;
+	private final EmailService emailService;
+	private final SmsService smsService;
 
 	@Override
-	public AuthResponseDto registerUser(RegisterRequestDto registerRequestDto) {
+	public AuthResponseDto registerUser(RegisterRequestDto dto) {
 
-		if (userRepository.existsByEmail(registerRequestDto.getEmail())) {
-			throw new DuplicateResourceException("Email already registered");
-		}
+	    if (userRepository.existsByEmail(dto.getEmail())) {
+	        throw new DuplicateResourceException("Email already registered");
+	    }
 
-		User user = new User();
+	    // 1. EMAIL OTP VERIFY
+	    OtpVerification emailOtp = otpRepository.findByEmail(dto.getEmail())
+	            .orElseThrow(() -> new RuntimeException("Email OTP not found"));
 
-		user.setFullName(registerRequestDto.getFullName());
+	    if (!emailOtp.getOtp().equals(dto.getEmailOtp())) {
+	        throw new RuntimeException("Invalid Email OTP");
+	    }
 
-		user.setEmail(registerRequestDto.getEmail());
+	    if (emailOtp.getExpiryTime().isBefore(LocalDateTime.now())) {
+	        throw new RuntimeException("Email OTP expired");
+	    }
 
-		user.setMobileNumber(registerRequestDto.getMobileNumber());
+	    // 2. MOBILE OTP VERIFY
+	    OtpVerification mobileOtp = otpRepository.findByEmail(dto.getMobileNumber())
+	            .orElseThrow(() -> new RuntimeException("Mobile OTP not found"));
 
-		user.setRole(Role.CUSTOMER);
+	    if (!mobileOtp.getOtp().equals(dto.getMobileOtp())) {
+	        throw new RuntimeException("Invalid Mobile OTP");
+	    }
 
-		user.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
+	    if (mobileOtp.getExpiryTime().isBefore(LocalDateTime.now())) {
+	        throw new RuntimeException("Mobile OTP expired");
+	    }
 
-		userRepository.save(user);
+	    // 3. CREATE USER
+	    User user = new User();
+	    user.setFullName(dto.getFullName());
+	    user.setEmail(dto.getEmail());
+	    user.setMobileNumber(dto.getMobileNumber());
+	    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+	    user.setRole(Role.CUSTOMER);
 
-		return new AuthResponseDto(null, null, "User Registered Successfully");
+	    user.setEmailVerified(true);
+	    user.setMobileVerified(true);
+
+	    userRepository.save(user);
+
+	    otpRepository.delete(emailOtp);
+	    otpRepository.delete(mobileOtp);
+
+	    return new AuthResponseDto(null, null, "User Registered Successfully");
 	}
-
 	@Override
 	public AuthResponseDto loginUser(LoginRequestDto loginRequestDto) {
 
@@ -102,5 +134,41 @@ public class AuthServiceImpl implements AuthService {
 		user.setActive(dto.getActive());
 
 		userRepository.save(user);
+	}
+
+	@Override
+	public void sendEmailOtp(String email) {
+
+		String otp = String.valueOf((int) ((Math.random() * 900000) + 100000));
+
+		OtpVerification verification = otpRepository.findByEmail(email).orElse(new OtpVerification());
+
+		verification.setEmail(email);
+		verification.setOtp(otp);
+		verification.setExpiryTime(LocalDateTime.now().plusMinutes(5));
+
+		otpRepository.save(verification);
+
+		emailService.sendOtp(email, otp);
+	}
+	
+	@Override
+	public void sendMobileOtp(String mobileNumber) {
+
+	    String otp = String.valueOf(
+	            (int)((Math.random() * 900000) + 100000));
+
+	    OtpVerification verification =
+	            otpRepository.findByEmail(mobileNumber)
+	                    .orElse(new OtpVerification());
+
+	    verification.setEmail(mobileNumber);
+	    verification.setOtp(otp);
+	    verification.setExpiryTime(
+	            LocalDateTime.now().plusMinutes(5));
+
+	    otpRepository.save(verification);
+
+	    smsService.sendOtp(mobileNumber, otp);
 	}
 }
