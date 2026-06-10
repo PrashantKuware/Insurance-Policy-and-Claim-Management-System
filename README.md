@@ -32,7 +32,6 @@ The Use Case Diagram illustrates the interactions between different users and th
     - Manage policy plans
     - Approve or reject claims
     - Monitor overall system operations
-<img width="1029" height="1018" alt="image 1" src="https://github.com/user-attachments/assets/cfe9f7a9-0c62-4462-a766-84c7c44aac34" />
 
 <img width="529" height="1103" alt="image" src="https://github.com/user-attachments/assets/fdb05fc6-fd84-4319-8244-21ac5683acf0" />
 
