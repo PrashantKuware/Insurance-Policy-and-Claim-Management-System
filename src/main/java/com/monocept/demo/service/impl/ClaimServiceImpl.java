@@ -2,19 +2,23 @@ package com.monocept.demo.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.monocept.demo.dto.request.ClaimDecisionRequestDto;
 import com.monocept.demo.dto.request.ClaimRecommendationRequestDto;
 import com.monocept.demo.dto.request.ClaimRequestDto;
 import com.monocept.demo.dto.request.ClaimReviewRequestDto;
 import com.monocept.demo.dto.response.ClaimResponseDto;
+import com.monocept.demo.dto.response.DocumentResponse;
 import com.monocept.demo.entity.Claim;
+import com.monocept.demo.entity.ClaimDocument;
 import com.monocept.demo.entity.Policy;
 import com.monocept.demo.enums.ClaimStatus;
 import com.monocept.demo.enums.PolicyStatus;
@@ -23,10 +27,12 @@ import com.monocept.demo.exception.DuplicateResourceException;
 import com.monocept.demo.exception.InvalidClaimStatusException;
 import com.monocept.demo.exception.InvalidPolicyStatusException;
 import com.monocept.demo.exception.ResourceNotFoundException;
+import com.monocept.demo.repository.ClaimDocumentRepository;
 import com.monocept.demo.repository.ClaimRepository;
 import com.monocept.demo.repository.PolicyRepository;
 import com.monocept.demo.service.ClaimService;
 import com.monocept.demo.service.ClaimStatusHistoryService;
+import com.monocept.demo.service.DocumentService;
 
 @Service
 public class ClaimServiceImpl implements ClaimService {
@@ -42,6 +48,12 @@ public class ClaimServiceImpl implements ClaimService {
 
 	@Autowired
 	private ModelMapper mapper;
+
+	@Autowired
+	private DocumentService fileUploadService;
+
+	@Autowired
+	private ClaimDocumentRepository claimDocumentRepository;
 
 	@Override
 	public ClaimResponseDto recommendClaimForApproval(Long claimId, ClaimRecommendationRequestDto requestDto) {
@@ -291,5 +303,28 @@ public class ClaimServiceImpl implements ClaimService {
 
 			throw new InvalidClaimStatusException("Approved or rejected claims cannot be modified");
 		}
+	}
+
+	@Override
+	public DocumentResponse uploadDocument(Long claimId, MultipartFile file) {
+
+		Claim claim = claimRepository.findById(claimId)
+				.orElseThrow(() -> new ResourceNotFoundException("Claim not found with id : " + claimId));
+
+		Map<String, Object> cloudinaryResponse = fileUploadService.uploadFile(file);
+
+		ClaimDocument document = ClaimDocument.builder().claim(claim).originalFileName(file.getOriginalFilename())
+				.contentType(file.getContentType()).sizeInBytes(file.getSize())
+				.cloudinaryPublicId(cloudinaryResponse.get("public_id").toString())
+				.cloudinaryUrl(cloudinaryResponse.get("secure_url").toString())
+				.resourceType(cloudinaryResponse.get("resource_type").toString()).build();
+
+		ClaimDocument savedDocument = claimDocumentRepository.save(document);
+
+		return DocumentResponse.builder().documentId(savedDocument.getDocumentId())
+				.originalFileName(savedDocument.getOriginalFileName()).contentType(savedDocument.getContentType())
+				.sizeInBytes(savedDocument.getSizeInBytes()).cloudinaryPublicId(savedDocument.getCloudinaryPublicId())
+				.cloudinaryUrl(savedDocument.getCloudinaryUrl()).resourceType(savedDocument.getResourceType())
+				.uploadedAt(savedDocument.getUploadedAt()).build();
 	}
 }

@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.monocept.demo.dto.request.ClaimDecisionRequestDto;
 import com.monocept.demo.dto.request.ClaimRecommendationRequestDto;
 import com.monocept.demo.dto.request.ClaimRequestDto;
 import com.monocept.demo.dto.request.ClaimReviewRequestDto;
 import com.monocept.demo.dto.response.ClaimResponseDto;
+import com.monocept.demo.dto.response.DocumentResponse;
 import com.monocept.demo.service.ClaimService;
 
 import jakarta.validation.Valid;
@@ -106,5 +109,12 @@ public class ClaimController {
 	public ResponseEntity<Page<ClaimResponseDto>> getAllClaims(Pageable pageable) {
 
 		return ResponseEntity.ok(claimService.getAllClaims(pageable));
+	}
+	
+	@PostMapping("/{claimId}/documents")
+	public ResponseEntity<DocumentResponse> uploadDocument( @PathVariable Long claimId, @RequestParam("file") MultipartFile file) 
+	{
+		System.out.println("Upload API called");
+	    return ResponseEntity.ok( claimService.uploadDocument(claimId, file) );
 	}
 }
