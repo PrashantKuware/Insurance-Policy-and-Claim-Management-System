@@ -313,11 +313,15 @@ public class ClaimServiceImpl implements ClaimService {
 
 		Map<String, Object> cloudinaryResponse = fileUploadService.uploadFile(file);
 
-		ClaimDocument document = ClaimDocument.builder().claim(claim).originalFileName(file.getOriginalFilename())
-				.contentType(file.getContentType()).sizeInBytes(file.getSize())
-				.cloudinaryPublicId(cloudinaryResponse.get("public_id").toString())
-				.cloudinaryUrl(cloudinaryResponse.get("secure_url").toString())
-				.resourceType(cloudinaryResponse.get("resource_type").toString()).build();
+		ClaimDocument document = ClaimDocument.builder()
+		        .claim(claim)
+		        .originalFileName(file.getOriginalFilename())
+		        .contentType(file.getContentType())
+		        .sizeInBytes(file.getSize())
+		        .cloudinaryPublicId(cloudinaryResponse.get("public_id").toString())
+		        .cloudinaryUrl(cloudinaryResponse.get("secure_url").toString())
+		        .resourceType(cloudinaryResponse.get("resource_type").toString())
+		        .build();
 
 		ClaimDocument savedDocument = claimDocumentRepository.save(document);
 
